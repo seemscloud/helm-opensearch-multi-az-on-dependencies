@@ -70,6 +70,10 @@ opensearch-master:
       value: "false"
     - name: DISABLE_SECURITY_PLUGIN
       value: "false"
+    - name: cluster.routing.allocation.awareness.attributes
+      value: "zone"
+    - name: cluster.routing.allocation.awareness.force.zone.values
+      value: "europe-central2-a,europe-central2-b,europe-central2-c"
 
   envFrom: [ ]
 
@@ -112,13 +116,13 @@ opensearch-master:
 
   persistence:
     enabled: false
-#    enableInitChown: true
-#    labels:
-#      enabled: false
-#    accessModes:
-#      - ReadWriteOnce
-#    size: 8Gi
-#    annotations: { }
+  #    enableInitChown: true
+  #    labels:
+  #      enabled: false
+  #    accessModes:
+  #      - ReadWriteOnce
+  #    size: 8Gi
+  #    annotations: { }
 
   extraVolumes: [ ]
   extraVolumeMounts: [ ]
@@ -130,7 +134,7 @@ opensearch-master:
   antiAffinityTopologyKey: "kubernetes.io/hostname"
   antiAffinity: "soft"
 
-  nodeAffinity: {}
+  nodeAffinity: { }
 
   topologySpreadConstraints: [ ]
 
@@ -201,7 +205,7 @@ opensearch-master:
   imagePullSecrets: [ ]
   nodeSelector: { }
 
-  tolerations: []
+  tolerations: [ ]
 
   ingress:
     enabled: false
@@ -301,6 +305,8 @@ opensearch-data-az1:
       value: "false"
     - name: DISABLE_SECURITY_PLUGIN
       value: "false"
+    - name: node.attr.zone
+      value: "europe-central2-a"
 
   envFrom: [ ]
 
@@ -343,13 +349,13 @@ opensearch-data-az1:
 
   persistence:
     enabled: false
-#    enableInitChown: true
-#    labels:
-#      enabled: false
-#    accessModes:
-#      - ReadWriteOnce
-#    size: 8Gi
-#    annotations: { }
+  #    enableInitChown: true
+  #    labels:
+  #      enabled: false
+  #    accessModes:
+  #      - ReadWriteOnce
+  #    size: 8Gi
+  #    annotations: { }
 
   extraVolumes: [ ]
   extraVolumeMounts: [ ]
@@ -438,7 +444,7 @@ opensearch-data-az1:
   imagePullSecrets: [ ]
   nodeSelector: { }
 
-  tolerations: []
+  tolerations: [ ]
 
   ingress:
     enabled: false
@@ -538,6 +544,8 @@ opensearch-data-az2:
       value: "false"
     - name: DISABLE_SECURITY_PLUGIN
       value: "false"
+    - name: node.attr.zone
+      value: "europe-central2-b"
 
   envFrom: [ ]
 
@@ -580,13 +588,13 @@ opensearch-data-az2:
 
   persistence:
     enabled: false
-#    enableInitChown: true
-#    labels:
-#      enabled: false
-#    accessModes:
-#      - ReadWriteOnce
-#    size: 8Gi
-#    annotations: { }
+  #    enableInitChown: true
+  #    labels:
+  #      enabled: false
+  #    accessModes:
+  #      - ReadWriteOnce
+  #    size: 8Gi
+  #    annotations: { }
 
   extraVolumes: [ ]
   extraVolumeMounts: [ ]
@@ -675,7 +683,7 @@ opensearch-data-az2:
   imagePullSecrets: [ ]
   nodeSelector: { }
 
-  tolerations: []
+  tolerations: [ ]
 
   ingress:
     enabled: false
@@ -775,6 +783,8 @@ opensearch-data-az3:
       value: "false"
     - name: DISABLE_SECURITY_PLUGIN
       value: "false"
+    - name: node.attr.zone
+      value: "europe-central2-c"
 
   envFrom: [ ]
 
@@ -817,13 +827,13 @@ opensearch-data-az3:
 
   persistence:
     enabled: false
-#    enableInitChown: true
-#    labels:
-#      enabled: false
-#    accessModes:
-#      - ReadWriteOnce
-#    size: 8Gi
-#    annotations: { }
+  #    enableInitChown: true
+  #    labels:
+  #      enabled: false
+  #    accessModes:
+  #      - ReadWriteOnce
+  #    size: 8Gi
+  #    annotations: { }
 
   extraVolumes: [ ]
   extraVolumeMounts: [ ]
@@ -912,7 +922,7 @@ opensearch-data-az3:
   imagePullSecrets: [ ]
   nodeSelector: { }
 
-  tolerations: []
+  tolerations: [ ]
 
   ingress:
     enabled: false
