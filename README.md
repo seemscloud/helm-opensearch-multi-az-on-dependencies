@@ -1,1 +1,0 @@
-# helm-opensearch-multiaz-on-dependency

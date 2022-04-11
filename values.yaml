@@ -1,0 +1,941 @@
+opensearch-master:
+  nameOverride: ""
+  fullnameOverride: ""
+
+  clusterName: "observability-opensearch"
+  nodeGroup: "master"
+
+  masterService: "observability-opensearch-master"
+
+  roles:
+    - master
+
+  replicas: 3
+  minimumMasterNodes: 1
+
+  majorVersion: ""
+
+  global:
+    dockerRegistry: ""
+
+  opensearchHome: /usr/share/opensearch
+  config:
+    opensearch.yml: |
+      cluster.name: observability-opensearch
+      network.host: 0.0.0.0
+
+      plugins:
+        security:
+          ssl:
+            transport:
+              pemcert_filepath: esnode.pem
+              pemkey_filepath: esnode-key.pem
+              pemtrustedcas_filepath: root-ca.pem
+              enforce_hostname_verification: false
+            http:
+              enabled: true
+              pemcert_filepath: esnode.pem
+              pemkey_filepath: esnode-key.pem
+              pemtrustedcas_filepath: root-ca.pem
+          allow_unsafe_democertificates: true
+          allow_default_init_securityindex: true
+          authcz:
+            admin_dn:
+              - CN=kirk,OU=client,O=client,L=test,C=de
+          audit.type: internal_opensearch
+          enable_snapshot_restore_privilege: true
+          check_snapshot_restore_write_privileges: true
+          restapi:
+            roles_enabled: ["all_access", "security_rest_api_access"]
+          system_indices:
+            enabled: true
+            indices:
+              [
+                ".opendistro-alerting-config",
+                ".opendistro-alerting-alert*",
+                ".opendistro-anomaly-results*",
+                ".opendistro-anomaly-detector*",
+                ".opendistro-anomaly-checkpoints",
+                ".opendistro-anomaly-detection-state",
+                ".opendistro-reports-*",
+                ".opendistro-notifications-*",
+                ".opendistro-notebooks",
+                ".opendistro-asynchronous-search-response*",
+              ]
+
+  extraEnvs:
+    - name: node.store.allow_mmap
+      value: "false"
+    - name: DISABLE_INSTALL_DEMO_CONFIG
+      value: "false"
+    - name: DISABLE_SECURITY_PLUGIN
+      value: "false"
+
+  envFrom: [ ]
+
+  secretMounts: [ ]
+
+  hostAliases: [ ]
+
+  image:
+    repository: "opensearchproject/opensearch"
+    tag: ""
+    pullPolicy: "IfNotPresent"
+
+  podAnnotations: { }
+
+  labels: { }
+
+  opensearchJavaOpts: "-Xmx1G -Xms1G"
+
+  resources:
+    requests:
+      cpu: "100m"
+      memory: "128Mi"
+    limits:
+      cpu: "1"
+      memory: "2Gi"
+
+  initResources: { }
+
+  sidecarResources: { }
+
+  networkHost: "0.0.0.0"
+
+  rbac:
+    create: false
+    serviceAccountAnnotations: { }
+    serviceAccountName: ""
+
+  podSecurityPolicy:
+    create: false
+
+  persistence:
+    enabled: false
+#    enableInitChown: true
+#    labels:
+#      enabled: false
+#    accessModes:
+#      - ReadWriteOnce
+#    size: 8Gi
+#    annotations: { }
+
+  extraVolumes: [ ]
+  extraVolumeMounts: [ ]
+  extraContainers: [ ]
+  extraInitContainers: [ ]
+
+  priorityClassName: ""
+
+  antiAffinityTopologyKey: "kubernetes.io/hostname"
+  antiAffinity: "soft"
+
+  nodeAffinity: {}
+
+  topologySpreadConstraints: [ ]
+
+  podManagementPolicy: "Parallel"
+
+  enableServiceLinks: true
+
+  protocol: http
+  httpPort: 9200
+  transportPort: 9300
+
+  service:
+    labels: { }
+    labelsHeadless: { }
+    headless:
+      annotations: { }
+    type: ClusterIP
+    nodePort: ""
+    annotations: { }
+    httpPortName: http
+    transportPortName: transport
+    loadBalancerIP: ""
+    loadBalancerSourceRanges: [ ]
+    externalTrafficPolicy: ""
+
+  updateStrategy: RollingUpdate
+
+  maxUnavailable: 1
+
+  podSecurityContext:
+    fsGroup: 1000
+    runAsUser: 1000
+
+  securityContext:
+    capabilities:
+      drop:
+        - ALL
+    runAsNonRoot: true
+    runAsUser: 1000
+
+  securityConfig:
+    enabled: true
+    path: "/usr/share/opensearch/plugins/opensearch-security/securityconfig"
+    actionGroupsSecret:
+    configSecret:
+    internalUsersSecret:
+    rolesSecret:
+    rolesMappingSecret:
+    tenantsSecret:
+    config:
+      securityConfigSecret: ""
+      dataComplete: true
+      data: { }
+
+  terminationGracePeriod: 120
+
+  sysctlVmMaxMapCount: 262144
+
+  readinessProbe:
+    failureThreshold: 3
+    initialDelaySeconds: 10
+    periodSeconds: 10
+    successThreshold: 3
+    timeoutSeconds: 2000
+
+  schedulerName: ""
+
+  imagePullSecrets: [ ]
+  nodeSelector: { }
+
+  tolerations: []
+
+  ingress:
+    enabled: false
+
+  masterTerminationFix: false
+
+  lifecycle: { }
+
+  keystore: [ ]
+
+  networkPolicy:
+    create: false
+
+    http:
+      enabled: false
+
+  fsGroup: ""
+
+  sysctl:
+    enabled: false
+
+  plugins:
+    enabled: false
+    installList: [ ]
+
+  extraObjects: [ ]
+
+opensearch-data-az1:
+  nameOverride: ""
+  fullnameOverride: ""
+
+  clusterName: "observability-opensearch"
+  nodeGroup: "data-az1"
+
+  masterService: "observability-opensearch-master"
+
+  roles:
+    - data
+
+  replicas: 3
+  minimumMasterNodes: 1
+
+  majorVersion: ""
+
+  global:
+    dockerRegistry: ""
+
+  opensearchHome: /usr/share/opensearch
+  config:
+    opensearch.yml: |
+      cluster.name: observability-opensearch
+      network.host: 0.0.0.0
+
+      plugins:
+        security:
+          ssl:
+            transport:
+              pemcert_filepath: esnode.pem
+              pemkey_filepath: esnode-key.pem
+              pemtrustedcas_filepath: root-ca.pem
+              enforce_hostname_verification: false
+            http:
+              enabled: true
+              pemcert_filepath: esnode.pem
+              pemkey_filepath: esnode-key.pem
+              pemtrustedcas_filepath: root-ca.pem
+          allow_unsafe_democertificates: true
+          allow_default_init_securityindex: true
+          authcz:
+            admin_dn:
+              - CN=kirk,OU=client,O=client,L=test,C=de
+          audit.type: internal_opensearch
+          enable_snapshot_restore_privilege: true
+          check_snapshot_restore_write_privileges: true
+          restapi:
+            roles_enabled: ["all_access", "security_rest_api_access"]
+          system_indices:
+            enabled: true
+            indices:
+              [
+                ".opendistro-alerting-config",
+                ".opendistro-alerting-alert*",
+                ".opendistro-anomaly-results*",
+                ".opendistro-anomaly-detector*",
+                ".opendistro-anomaly-checkpoints",
+                ".opendistro-anomaly-detection-state",
+                ".opendistro-reports-*",
+                ".opendistro-notifications-*",
+                ".opendistro-notebooks",
+                ".opendistro-asynchronous-search-response*",
+              ]
+
+  extraEnvs:
+    - name: node.store.allow_mmap
+      value: "false"
+    - name: DISABLE_INSTALL_DEMO_CONFIG
+      value: "false"
+    - name: DISABLE_SECURITY_PLUGIN
+      value: "false"
+
+  envFrom: [ ]
+
+  secretMounts: [ ]
+
+  hostAliases: [ ]
+
+  image:
+    repository: "opensearchproject/opensearch"
+    tag: ""
+    pullPolicy: "IfNotPresent"
+
+  podAnnotations: { }
+
+  labels: { }
+
+  opensearchJavaOpts: "-Xmx1G -Xms1G"
+
+  resources:
+    requests:
+      cpu: "100m"
+      memory: "128Mi"
+    limits:
+      cpu: "1"
+      memory: "2Gi"
+
+  initResources: { }
+
+  sidecarResources: { }
+
+  networkHost: "0.0.0.0"
+
+  rbac:
+    create: false
+    serviceAccountAnnotations: { }
+    serviceAccountName: ""
+
+  podSecurityPolicy:
+    create: false
+
+  persistence:
+    enabled: false
+#    enableInitChown: true
+#    labels:
+#      enabled: false
+#    accessModes:
+#      - ReadWriteOnce
+#    size: 8Gi
+#    annotations: { }
+
+  extraVolumes: [ ]
+  extraVolumeMounts: [ ]
+  extraContainers: [ ]
+  extraInitContainers: [ ]
+
+  priorityClassName: ""
+
+  antiAffinityTopologyKey: "kubernetes.io/hostname"
+  antiAffinity: "soft"
+
+  nodeAffinity:
+    requiredDuringSchedulingIgnoredDuringExecution:
+      nodeSelectorTerms:
+        - matchExpressions:
+            - key: topology.kubernetes.io/zone
+              operator: In
+              values: [ "europe-central2-a" ]
+
+  topologySpreadConstraints: [ ]
+
+  podManagementPolicy: "Parallel"
+
+  enableServiceLinks: true
+
+  protocol: http
+  httpPort: 9200
+  transportPort: 9300
+
+  service:
+    labels: { }
+    labelsHeadless: { }
+    headless:
+      annotations: { }
+    type: ClusterIP
+    nodePort: ""
+    annotations: { }
+    httpPortName: http
+    transportPortName: transport
+    loadBalancerIP: ""
+    loadBalancerSourceRanges: [ ]
+    externalTrafficPolicy: ""
+
+  updateStrategy: RollingUpdate
+
+  maxUnavailable: 1
+
+  podSecurityContext:
+    fsGroup: 1000
+    runAsUser: 1000
+
+  securityContext:
+    capabilities:
+      drop:
+        - ALL
+    runAsNonRoot: true
+    runAsUser: 1000
+
+  securityConfig:
+    enabled: true
+    path: "/usr/share/opensearch/plugins/opensearch-security/securityconfig"
+    actionGroupsSecret:
+    configSecret:
+    internalUsersSecret:
+    rolesSecret:
+    rolesMappingSecret:
+    tenantsSecret:
+    config:
+      securityConfigSecret: ""
+      dataComplete: true
+      data: { }
+
+  terminationGracePeriod: 120
+
+  sysctlVmMaxMapCount: 262144
+
+  readinessProbe:
+    failureThreshold: 3
+    initialDelaySeconds: 10
+    periodSeconds: 10
+    successThreshold: 3
+    timeoutSeconds: 2000
+
+  schedulerName: ""
+
+  imagePullSecrets: [ ]
+  nodeSelector: { }
+
+  tolerations: []
+
+  ingress:
+    enabled: false
+
+  masterTerminationFix: false
+
+  lifecycle: { }
+
+  keystore: [ ]
+
+  networkPolicy:
+    create: false
+
+    http:
+      enabled: false
+
+  fsGroup: ""
+
+  sysctl:
+    enabled: false
+
+  plugins:
+    enabled: false
+    installList: [ ]
+
+  extraObjects: [ ]
+
+opensearch-data-az2:
+  nameOverride: ""
+  fullnameOverride: ""
+
+  clusterName: "observability-opensearch"
+  nodeGroup: "data-az2"
+
+  masterService: "observability-opensearch-master"
+
+  roles:
+    - data
+
+  replicas: 3
+  minimumMasterNodes: 1
+
+  majorVersion: ""
+
+  global:
+    dockerRegistry: ""
+
+  opensearchHome: /usr/share/opensearch
+  config:
+    opensearch.yml: |
+      cluster.name: observability-opensearch
+      network.host: 0.0.0.0
+
+      plugins:
+        security:
+          ssl:
+            transport:
+              pemcert_filepath: esnode.pem
+              pemkey_filepath: esnode-key.pem
+              pemtrustedcas_filepath: root-ca.pem
+              enforce_hostname_verification: false
+            http:
+              enabled: true
+              pemcert_filepath: esnode.pem
+              pemkey_filepath: esnode-key.pem
+              pemtrustedcas_filepath: root-ca.pem
+          allow_unsafe_democertificates: true
+          allow_default_init_securityindex: true
+          authcz:
+            admin_dn:
+              - CN=kirk,OU=client,O=client,L=test,C=de
+          audit.type: internal_opensearch
+          enable_snapshot_restore_privilege: true
+          check_snapshot_restore_write_privileges: true
+          restapi:
+            roles_enabled: ["all_access", "security_rest_api_access"]
+          system_indices:
+            enabled: true
+            indices:
+              [
+                ".opendistro-alerting-config",
+                ".opendistro-alerting-alert*",
+                ".opendistro-anomaly-results*",
+                ".opendistro-anomaly-detector*",
+                ".opendistro-anomaly-checkpoints",
+                ".opendistro-anomaly-detection-state",
+                ".opendistro-reports-*",
+                ".opendistro-notifications-*",
+                ".opendistro-notebooks",
+                ".opendistro-asynchronous-search-response*",
+              ]
+
+  extraEnvs:
+    - name: node.store.allow_mmap
+      value: "false"
+    - name: DISABLE_INSTALL_DEMO_CONFIG
+      value: "false"
+    - name: DISABLE_SECURITY_PLUGIN
+      value: "false"
+
+  envFrom: [ ]
+
+  secretMounts: [ ]
+
+  hostAliases: [ ]
+
+  image:
+    repository: "opensearchproject/opensearch"
+    tag: ""
+    pullPolicy: "IfNotPresent"
+
+  podAnnotations: { }
+
+  labels: { }
+
+  opensearchJavaOpts: "-Xmx1G -Xms1G"
+
+  resources:
+    requests:
+      cpu: "100m"
+      memory: "128Mi"
+    limits:
+      cpu: "1"
+      memory: "2Gi"
+
+  initResources: { }
+
+  sidecarResources: { }
+
+  networkHost: "0.0.0.0"
+
+  rbac:
+    create: false
+    serviceAccountAnnotations: { }
+    serviceAccountName: ""
+
+  podSecurityPolicy:
+    create: false
+
+  persistence:
+    enabled: false
+#    enableInitChown: true
+#    labels:
+#      enabled: false
+#    accessModes:
+#      - ReadWriteOnce
+#    size: 8Gi
+#    annotations: { }
+
+  extraVolumes: [ ]
+  extraVolumeMounts: [ ]
+  extraContainers: [ ]
+  extraInitContainers: [ ]
+
+  priorityClassName: ""
+
+  antiAffinityTopologyKey: "kubernetes.io/hostname"
+  antiAffinity: "soft"
+
+  nodeAffinity:
+    requiredDuringSchedulingIgnoredDuringExecution:
+      nodeSelectorTerms:
+        - matchExpressions:
+            - key: topology.kubernetes.io/zone
+              operator: In
+              values: [ "europe-central2-b" ]
+
+  topologySpreadConstraints: [ ]
+
+  podManagementPolicy: "Parallel"
+
+  enableServiceLinks: true
+
+  protocol: http
+  httpPort: 9200
+  transportPort: 9300
+
+  service:
+    labels: { }
+    labelsHeadless: { }
+    headless:
+      annotations: { }
+    type: ClusterIP
+    nodePort: ""
+    annotations: { }
+    httpPortName: http
+    transportPortName: transport
+    loadBalancerIP: ""
+    loadBalancerSourceRanges: [ ]
+    externalTrafficPolicy: ""
+
+  updateStrategy: RollingUpdate
+
+  maxUnavailable: 1
+
+  podSecurityContext:
+    fsGroup: 1000
+    runAsUser: 1000
+
+  securityContext:
+    capabilities:
+      drop:
+        - ALL
+    runAsNonRoot: true
+    runAsUser: 1000
+
+  securityConfig:
+    enabled: true
+    path: "/usr/share/opensearch/plugins/opensearch-security/securityconfig"
+    actionGroupsSecret:
+    configSecret:
+    internalUsersSecret:
+    rolesSecret:
+    rolesMappingSecret:
+    tenantsSecret:
+    config:
+      securityConfigSecret: ""
+      dataComplete: true
+      data: { }
+
+  terminationGracePeriod: 120
+
+  sysctlVmMaxMapCount: 262144
+
+  readinessProbe:
+    failureThreshold: 3
+    initialDelaySeconds: 10
+    periodSeconds: 10
+    successThreshold: 3
+    timeoutSeconds: 2000
+
+  schedulerName: ""
+
+  imagePullSecrets: [ ]
+  nodeSelector: { }
+
+  tolerations: []
+
+  ingress:
+    enabled: false
+
+  masterTerminationFix: false
+
+  lifecycle: { }
+
+  keystore: [ ]
+
+  networkPolicy:
+    create: false
+
+    http:
+      enabled: false
+
+  fsGroup: ""
+
+  sysctl:
+    enabled: false
+
+  plugins:
+    enabled: false
+    installList: [ ]
+
+  extraObjects: [ ]
+
+opensearch-data-az3:
+  nameOverride: ""
+  fullnameOverride: ""
+
+  clusterName: "observability-opensearch"
+  nodeGroup: "data-az3"
+
+  masterService: "observability-opensearch-master"
+
+  roles:
+    - data
+
+  replicas: 3
+  minimumMasterNodes: 1
+
+  majorVersion: ""
+
+  global:
+    dockerRegistry: ""
+
+  opensearchHome: /usr/share/opensearch
+  config:
+    opensearch.yml: |
+      cluster.name: observability-opensearch
+      network.host: 0.0.0.0
+
+      plugins:
+        security:
+          ssl:
+            transport:
+              pemcert_filepath: esnode.pem
+              pemkey_filepath: esnode-key.pem
+              pemtrustedcas_filepath: root-ca.pem
+              enforce_hostname_verification: false
+            http:
+              enabled: true
+              pemcert_filepath: esnode.pem
+              pemkey_filepath: esnode-key.pem
+              pemtrustedcas_filepath: root-ca.pem
+          allow_unsafe_democertificates: true
+          allow_default_init_securityindex: true
+          authcz:
+            admin_dn:
+              - CN=kirk,OU=client,O=client,L=test,C=de
+          audit.type: internal_opensearch
+          enable_snapshot_restore_privilege: true
+          check_snapshot_restore_write_privileges: true
+          restapi:
+            roles_enabled: ["all_access", "security_rest_api_access"]
+          system_indices:
+            enabled: true
+            indices:
+              [
+                ".opendistro-alerting-config",
+                ".opendistro-alerting-alert*",
+                ".opendistro-anomaly-results*",
+                ".opendistro-anomaly-detector*",
+                ".opendistro-anomaly-checkpoints",
+                ".opendistro-anomaly-detection-state",
+                ".opendistro-reports-*",
+                ".opendistro-notifications-*",
+                ".opendistro-notebooks",
+                ".opendistro-asynchronous-search-response*",
+              ]
+
+  extraEnvs:
+    - name: node.store.allow_mmap
+      value: "false"
+    - name: DISABLE_INSTALL_DEMO_CONFIG
+      value: "false"
+    - name: DISABLE_SECURITY_PLUGIN
+      value: "false"
+
+  envFrom: [ ]
+
+  secretMounts: [ ]
+
+  hostAliases: [ ]
+
+  image:
+    repository: "opensearchproject/opensearch"
+    tag: ""
+    pullPolicy: "IfNotPresent"
+
+  podAnnotations: { }
+
+  labels: { }
+
+  opensearchJavaOpts: "-Xmx1G -Xms1G"
+
+  resources:
+    requests:
+      cpu: "100m"
+      memory: "128Mi"
+    limits:
+      cpu: "1"
+      memory: "2Gi"
+
+  initResources: { }
+
+  sidecarResources: { }
+
+  networkHost: "0.0.0.0"
+
+  rbac:
+    create: false
+    serviceAccountAnnotations: { }
+    serviceAccountName: ""
+
+  podSecurityPolicy:
+    create: false
+
+  persistence:
+    enabled: false
+#    enableInitChown: true
+#    labels:
+#      enabled: false
+#    accessModes:
+#      - ReadWriteOnce
+#    size: 8Gi
+#    annotations: { }
+
+  extraVolumes: [ ]
+  extraVolumeMounts: [ ]
+  extraContainers: [ ]
+  extraInitContainers: [ ]
+
+  priorityClassName: ""
+
+  antiAffinityTopologyKey: "kubernetes.io/hostname"
+  antiAffinity: "soft"
+
+  nodeAffinity:
+    requiredDuringSchedulingIgnoredDuringExecution:
+      nodeSelectorTerms:
+        - matchExpressions:
+            - key: topology.kubernetes.io/zone
+              operator: In
+              values: [ "europe-central2-c" ]
+
+  topologySpreadConstraints: [ ]
+
+  podManagementPolicy: "Parallel"
+
+  enableServiceLinks: true
+
+  protocol: http
+  httpPort: 9200
+  transportPort: 9300
+
+  service:
+    labels: { }
+    labelsHeadless: { }
+    headless:
+      annotations: { }
+    type: ClusterIP
+    nodePort: ""
+    annotations: { }
+    httpPortName: http
+    transportPortName: transport
+    loadBalancerIP: ""
+    loadBalancerSourceRanges: [ ]
+    externalTrafficPolicy: ""
+
+  updateStrategy: RollingUpdate
+
+  maxUnavailable: 1
+
+  podSecurityContext:
+    fsGroup: 1000
+    runAsUser: 1000
+
+  securityContext:
+    capabilities:
+      drop:
+        - ALL
+    runAsNonRoot: true
+    runAsUser: 1000
+
+  securityConfig:
+    enabled: true
+    path: "/usr/share/opensearch/plugins/opensearch-security/securityconfig"
+    actionGroupsSecret:
+    configSecret:
+    internalUsersSecret:
+    rolesSecret:
+    rolesMappingSecret:
+    tenantsSecret:
+    config:
+      securityConfigSecret: ""
+      dataComplete: true
+      data: { }
+
+  terminationGracePeriod: 120
+
+  sysctlVmMaxMapCount: 262144
+
+  readinessProbe:
+    failureThreshold: 3
+    initialDelaySeconds: 10
+    periodSeconds: 10
+    successThreshold: 3
+    timeoutSeconds: 2000
+
+  schedulerName: ""
+
+  imagePullSecrets: [ ]
+  nodeSelector: { }
+
+  tolerations: []
+
+  ingress:
+    enabled: false
+
+  masterTerminationFix: false
+
+  lifecycle: { }
+
+  keystore: [ ]
+
+  networkPolicy:
+    create: false
+
+    http:
+      enabled: false
+
+  fsGroup: ""
+
+  sysctl:
+    enabled: false
+
+  plugins:
+    enabled: false
+    installList: [ ]
+
+  extraObjects: [ ]
