@@ -900,7 +900,7 @@ opensearch-dashboards:
     enabled: true
     annotations: { }
     hosts:
-      - host: opensearch.traefik.127.0.0.1.sslip.io
+      - host: opensearch-dashboard.traefik.127.0.0.1.sslip.io
         paths:
           - path: /
             backend:
