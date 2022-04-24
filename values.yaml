@@ -888,7 +888,7 @@ opensearch-dashboards:
   serverHost: "0.0.0.0"
 
   service:
-    type: ClusterIP
+    type: LoadBalancer
     port: 5601
     loadBalancerIP: ""
     nodePort: ""
@@ -898,15 +898,15 @@ opensearch-dashboards:
     httpPortName: http
 
   ingress:
-    enabled: false
+    enabled: true
     annotations: { }
     hosts:
-      - host: chart-example.local
+      - host: opensearch.traefik.127.0.0.1.sslip.io
         paths:
           - path: /
             backend:
-              serviceName: chart-example.local
-              servicePort: 80
+              serviceName: observability-opensearch-dashboards
+              servicePort: 5601
     tls: [ ]
 
   resources:
