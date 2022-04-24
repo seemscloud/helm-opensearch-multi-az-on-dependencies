@@ -94,15 +94,15 @@ opensearch-master:
 
   labels: { }
 
-  opensearchJavaOpts: "-Xmx1G -Xms1G"
+  opensearchJavaOpts: "-Xmx4G -Xms4G"
 
   resources:
     requests:
       cpu: "100m"
       memory: "128Mi"
     limits:
-      cpu: "1"
-      memory: "1536Mi"
+      cpu: "4"
+      memory: "5Gi"
 
   initResources: { }
 
@@ -196,8 +196,96 @@ opensearch-master:
     tenantsSecret:
     config:
       securityConfigSecret: ""
-      dataComplete: true
-      data: { }
+      dataComplete: false
+      data:
+        internal_users.yml: |
+          ---
+          _meta:
+            type: "internalusers"
+            config_version: 2
+          
+          admin:
+            hash: "$2a$12$VcCDgh2NDk07JGN0rjGbM.Ad41qVR/YFJcgHp0UGns5JDymv..TOG"
+            reserved: true
+            backend_roles:
+            - "admin"
+            description: "Admin user"
+          
+          user:
+            hash: "$2a$12$VcCDgh2NDk07JGN0rjGbM.Ad41qVR/YFJcgHp0UGns5JDymv..TOG"
+            reserved: true
+            backend_roles:
+            - "admin"
+            description: "Example user"
+          
+          kibanaserver:
+            hash: "$2a$12$4AcgAt3xwOWadA5s5blL6ev39OXDNhmOesEoo33eZtrq2N0YrU3H."
+            reserved: true
+            description: "OpenSearch Dashboards user"
+        roles.yml: |
+          _meta:
+            type: "roles"
+            config_version: 2
+          
+          kibana_read_only:
+            reserved: false
+          security_rest_api_access:
+            reserved: false
+          alerting_read_access:
+            reserved: false
+          alerting_ack_alerts:
+            reserved: false
+          alerting_full_access:
+            reserved: false
+          anomaly_read_access:
+            reserved: false
+          anomaly_full_access:
+            reserved: false
+          notebooks_read_access:
+            reserved: false
+          notebooks_full_access:
+            reserved: false
+          observability_read_access:
+            reserved: false
+          observability_full_access:
+            reserved: false
+          reports_instances_read_access:
+            reserved: false
+          reports_read_access:
+            reserved: false
+          reports_full_access:
+            reserved: false
+          asynchronous_search_full_access:
+            reserved: false
+          asynchronous_search_read_access:
+            reserved: false
+          index_management_full_access:
+            reserved: false
+          cross_cluster_replication_leader_full_access:
+            reserved: false
+          cross_cluster_replication_follower_full_access:
+            reserved: false
+          ml_read_access:
+            reserved: false
+          ml_full_access:
+            reserved: false
+
+        roles_mapping.yml: |
+          ---
+          _meta:
+            type: "rolesmapping"
+            config_version: 2
+
+          all_access:
+            reserved: false
+            backend_roles:
+            - "admin"
+            description: "Maps admin to all_access"
+
+          kibana_server:
+            reserved: true
+            users:
+            - "kibanaserver"
 
   terminationGracePeriod: 120
 
@@ -338,15 +426,15 @@ opensearch-data-az1:
 
   labels: { }
 
-  opensearchJavaOpts: "-Xmx1G -Xms1G"
+  opensearchJavaOpts: "-Xmx4G -Xms4G"
 
   resources:
     requests:
       cpu: "100m"
       memory: "128Mi"
     limits:
-      cpu: "1"
-      memory: "1536Mi"
+      cpu: "4"
+      memory: "5Gi"
 
   initResources: { }
 
@@ -386,13 +474,13 @@ opensearch-data-az1:
 
   antiAffinity: "soft"
 
-  nodeAffinity: {}
-#    requiredDuringSchedulingIgnoredDuringExecution:
-#      nodeSelectorTerms:
-#        - matchExpressions:
-#            - key: topology.kubernetes.io/zone
-#              operator: In
-#              values: [ "az1" ]
+  nodeAffinity: { }
+  #    requiredDuringSchedulingIgnoredDuringExecution:
+  #      nodeSelectorTerms:
+  #        - matchExpressions:
+  #            - key: topology.kubernetes.io/zone
+  #              operator: In
+  #              values: [ "az1" ]
 
   topologySpreadConstraints: [ ]
 
@@ -446,8 +534,96 @@ opensearch-data-az1:
     tenantsSecret:
     config:
       securityConfigSecret: ""
-      dataComplete: true
-      data: { }
+      dataComplete: false
+      data:
+        internal_users.yml: |
+          ---
+          _meta:
+            type: "internalusers"
+            config_version: 2
+          
+          admin:
+            hash: "$2a$12$VcCDgh2NDk07JGN0rjGbM.Ad41qVR/YFJcgHp0UGns5JDymv..TOG"
+            reserved: true
+            backend_roles:
+            - "admin"
+            description: "Admin user"
+          
+          user:
+            hash: "$2a$12$VcCDgh2NDk07JGN0rjGbM.Ad41qVR/YFJcgHp0UGns5JDymv..TOG"
+            reserved: true
+            backend_roles:
+            - "admin"
+            description: "Example user"
+          
+          kibanaserver:
+            hash: "$2a$12$4AcgAt3xwOWadA5s5blL6ev39OXDNhmOesEoo33eZtrq2N0YrU3H."
+            reserved: true
+            description: "OpenSearch Dashboards user"
+        roles.yml: |
+          _meta:
+            type: "roles"
+            config_version: 2
+          
+          kibana_read_only:
+            reserved: false
+          security_rest_api_access:
+            reserved: true
+          alerting_read_access:
+            reserved: false
+          alerting_ack_alerts:
+            reserved: false
+          alerting_full_access:
+            reserved: false
+          anomaly_read_access:
+            reserved: false
+          anomaly_full_access:
+            reserved: false
+          notebooks_read_access:
+            reserved: false
+          notebooks_full_access:
+            reserved: false
+          observability_read_access:
+            reserved: false
+          observability_full_access:
+            reserved: false
+          reports_instances_read_access:
+            reserved: false
+          reports_read_access:
+            reserved: false
+          reports_full_access:
+            reserved: false
+          asynchronous_search_full_access:
+            reserved: false
+          asynchronous_search_read_access:
+            reserved: false
+          index_management_full_access:
+            reserved: false
+          cross_cluster_replication_leader_full_access:
+            reserved: false
+          cross_cluster_replication_follower_full_access:
+            reserved: false
+          ml_read_access:
+            reserved: false
+          ml_full_access:
+            reserved: false
+
+        roles_mapping.yml: |
+          ---
+          _meta:
+            type: "rolesmapping"
+            config_version: 2
+
+          all_access:
+            reserved: false
+            backend_roles:
+            - "admin"
+            description: "Maps admin to all_access"
+
+          kibana_server:
+            reserved: true
+            users:
+            - "kibanaserver"
 
   terminationGracePeriod: 120
 
@@ -587,15 +763,15 @@ opensearch-data-az2:
 
   labels: { }
 
-  opensearchJavaOpts: "-Xmx1G -Xms1G"
+  opensearchJavaOpts: "-Xmx4G -Xms4G"
 
   resources:
     requests:
       cpu: "100m"
       memory: "128Mi"
     limits:
-      cpu: "1"
-      memory: "1536Mi"
+      cpu: "4"
+      memory: "5Gi"
 
   initResources: { }
 
@@ -635,13 +811,13 @@ opensearch-data-az2:
 
   antiAffinity: "soft"
 
-  nodeAffinity: {}
-#    requiredDuringSchedulingIgnoredDuringExecution:
-#      nodeSelectorTerms:
-#        - matchExpressions:
-#            - key: topology.kubernetes.io/zone
-#              operator: In
-#              values: [ "az1" ]
+  nodeAffinity: { }
+  #    requiredDuringSchedulingIgnoredDuringExecution:
+  #      nodeSelectorTerms:
+  #        - matchExpressions:
+  #            - key: topology.kubernetes.io/zone
+  #              operator: In
+  #              values: [ "az1" ]
 
   topologySpreadConstraints: [ ]
 
@@ -695,8 +871,96 @@ opensearch-data-az2:
     tenantsSecret:
     config:
       securityConfigSecret: ""
-      dataComplete: true
-      data: { }
+      dataComplete: false
+      data:
+        internal_users.yml: |
+          ---
+          _meta:
+            type: "internalusers"
+            config_version: 2
+          
+          admin:
+            hash: "$2a$12$VcCDgh2NDk07JGN0rjGbM.Ad41qVR/YFJcgHp0UGns5JDymv..TOG"
+            reserved: true
+            backend_roles:
+            - "admin"
+            description: "Admin user"
+          
+          user:
+            hash: "$2a$12$VcCDgh2NDk07JGN0rjGbM.Ad41qVR/YFJcgHp0UGns5JDymv..TOG"
+            reserved: true
+            backend_roles:
+            - "admin"
+            description: "Example user"
+          
+          kibanaserver:
+            hash: "$2a$12$4AcgAt3xwOWadA5s5blL6ev39OXDNhmOesEoo33eZtrq2N0YrU3H."
+            reserved: true
+            description: "OpenSearch Dashboards user"
+        roles.yml: |
+          _meta:
+            type: "roles"
+            config_version: 2
+          
+          kibana_read_only:
+            reserved: false
+          security_rest_api_access:
+            reserved: true
+          alerting_read_access:
+            reserved: false
+          alerting_ack_alerts:
+            reserved: false
+          alerting_full_access:
+            reserved: false
+          anomaly_read_access:
+            reserved: false
+          anomaly_full_access:
+            reserved: false
+          notebooks_read_access:
+            reserved: false
+          notebooks_full_access:
+            reserved: false
+          observability_read_access:
+            reserved: false
+          observability_full_access:
+            reserved: false
+          reports_instances_read_access:
+            reserved: false
+          reports_read_access:
+            reserved: false
+          reports_full_access:
+            reserved: false
+          asynchronous_search_full_access:
+            reserved: false
+          asynchronous_search_read_access:
+            reserved: false
+          index_management_full_access:
+            reserved: false
+          cross_cluster_replication_leader_full_access:
+            reserved: false
+          cross_cluster_replication_follower_full_access:
+            reserved: false
+          ml_read_access:
+            reserved: false
+          ml_full_access:
+            reserved: false
+
+        roles_mapping.yml: |
+          ---
+          _meta:
+            type: "rolesmapping"
+            config_version: 2
+
+          all_access:
+            reserved: false
+            backend_roles:
+            - "admin"
+            description: "Maps admin to all_access"
+
+          kibana_server:
+            reserved: true
+            users:
+            - "kibanaserver"
 
   terminationGracePeriod: 120
 
@@ -739,5 +1003,130 @@ opensearch-data-az2:
   plugins:
     enabled: false
     installList: [ ]
+
+  extraObjects: [ ]
+
+opensearch-dashboards:
+  nameOverride: ""
+
+  fullnameOverride: "observability-opensearch-dashboards"
+
+  opensearchHosts: "https://observability-opensearch-master-headless:9200"
+
+  replicaCount: 1
+
+  image:
+    repository: "opensearchproject/opensearch-dashboards"
+    tag: ""
+    pullPolicy: "IfNotPresent"
+
+  imagePullSecrets: [ ]
+
+  serviceAccount:
+    create: false
+  #    annotations: { }
+  #    name: ""
+
+  rbac:
+    create: false
+
+  secretMounts: [ ]
+
+  podAnnotations: { }
+
+  extraEnvs: [ ]
+
+  envFrom: [ ]
+
+  extraVolumes: [ ]
+
+  extraVolumeMounts: [ ]
+
+  extraInitContainers: ""
+
+  extraContainers: ""
+
+  podSecurityContext: { }
+
+  securityContext:
+    capabilities:
+      drop:
+        - ALL
+    runAsNonRoot: true
+    runAsUser: 1000
+
+  config:
+    opensearch_dashboards.yml: |
+      opensearch.ssl.verificationMode: none
+      
+      opensearch.username: kibanaserver
+      opensearch.password: kibanaserver
+      
+      opensearch.requestHeadersWhitelist: [authorization, securitytenant]
+      
+      opensearch_security.multitenancy.enabled: true
+      opensearch_security.multitenancy.tenants.enable_global: false
+      opensearch_security.multitenancy.tenants.enable_private: false
+      opensearch_security.multitenancy.tenants.preferred: [Private, Global]
+      opensearch_security.readonly_mode.roles: [kibana_read_only]
+      opensearch_security.cookie.secure: false
+
+  priorityClassName: ""
+
+  opensearchAccount:
+    secret: ""
+    keyPassphrase:
+      enabled: false
+
+  labels: { }
+
+  hostAliases: [ ]
+
+  serverHost: "0.0.0.0"
+
+  service:
+    type: ClusterIP
+    port: 5601
+    loadBalancerIP: ""
+    nodePort: ""
+    labels: { }
+    annotations: { }
+    loadBalancerSourceRanges: [ ]
+    httpPortName: http
+
+  ingress:
+    enabled: false
+  #    annotations: { }
+  #    hosts:
+  #      - host: chart-example.local
+  #        paths:
+  #          - path: /
+  #            backend:
+  #              serviceName: chart-example.local
+  #              servicePort: 80
+  #    tls: [ ]
+
+  resources:
+    requests:
+      cpu: "100m"
+      memory: "128Mi"
+    limits:
+      cpu: "4"
+      memory: "5Gi"
+
+  autoscaling:
+    enabled: false
+    minReplicas: 1
+    maxReplicas: 100
+    targetCPUUtilizationPercentage: 80
+
+  updateStrategy:
+    type: "Recreate"
+
+  nodeSelector: { }
+
+  tolerations: [ ]
+
+  affinity: { }
 
   extraObjects: [ ]
