@@ -866,7 +866,7 @@ opensearch-dashboards:
       opensearch.requestHeadersWhitelist: [authorization, securitytenant]
       
       opensearch_security.multitenancy.enabled: true
-      opensearch_security.multitenancy.tenants.enable_global: true
+      opensearch_security.multitenancy.tenants.enable_global: false
       opensearch_security.multitenancy.tenants.enable_private: false
       opensearch_security.multitenancy.tenants.preferred: [Private, Global]
       
