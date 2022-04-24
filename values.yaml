@@ -175,8 +175,8 @@ opensearch-master:
   securityConfig:
     enabled: true
     path: "/usr/share/opensearch/plugins/opensearch-security/securityconfig"
-    actionGroupsSecret:
-    configSecret:
+    actionGroupsSecret: "observability-opensearch-security-plugin"
+    configSecret: "observability-opensearch-security-plugin"
     internalUsersSecret: "observability-opensearch-security-plugin"
     rolesSecret: "observability-opensearch-security-plugin"
     rolesMappingSecret: "observability-opensearch-security-plugin"
@@ -184,7 +184,61 @@ opensearch-master:
     config:
       securityConfigSecret: ""
       dataComplete: false
-      data: { }
+      data:
+        audit.yml: |-
+          ---
+          _meta:
+            type: "audit"
+            config_version: 2
+
+          config:
+            enabled: true
+            audit:
+              enable_rest: true
+              disabled_rest_categories:
+                - AUTHENTICATED
+                - GRANTED_PRIVILEGES
+              enable_transport: true
+              disabled_transport_categories:
+                - AUTHENTICATED
+                - GRANTED_PRIVILEGES
+              ignore_users:
+                - kibanaserver
+              ignore_requests: []
+              resolve_bulk_requests: false
+              log_request_body: true
+              resolve_indices: true
+              exclude_sensitive_headers: true
+            compliance:
+              enabled: true
+              internal_config: true
+              external_config: false
+              read_metadata_only: true
+              read_watched_fields: {}
+              read_ignore_users:
+                - kibanaserver
+              write_metadata_only: true
+              write_log_diffs: false
+              write_watched_indices: []
+              write_ignore_users:
+                - kibanaserver
+        nodes_dn.yml: |-
+          _meta:
+            type: "nodesdn"
+            config_version: 2
+        whitelist.yml: |-
+          ---
+          _meta:
+            type: "whitelist"
+            config_version: 2
+          
+          config:
+            enabled: false
+            requests:
+              /_cluster/settings:
+                - GET
+              /_cat/nodes:
+                - GET
 
   readinessProbe:
     failureThreshold: 3
@@ -394,8 +448,8 @@ opensearch-data-az1:
   securityConfig:
     enabled: true
     path: "/usr/share/opensearch/plugins/opensearch-security/securityconfig"
-    actionGroupsSecret:
-    configSecret:
+    actionGroupsSecret: "observability-opensearch-security-plugin"
+    configSecret: "observability-opensearch-security-plugin"
     internalUsersSecret: "observability-opensearch-security-plugin"
     rolesSecret: "observability-opensearch-security-plugin"
     rolesMappingSecret: "observability-opensearch-security-plugin"
@@ -403,7 +457,61 @@ opensearch-data-az1:
     config:
       securityConfigSecret: ""
       dataComplete: false
-      data: { }
+      data:
+        audit.yml: |-
+          ---
+          _meta:
+            type: "audit"
+            config_version: 2
+
+          config:
+            enabled: true
+            audit:
+              enable_rest: true
+              disabled_rest_categories:
+                - AUTHENTICATED
+                - GRANTED_PRIVILEGES
+              enable_transport: true
+              disabled_transport_categories:
+                - AUTHENTICATED
+                - GRANTED_PRIVILEGES
+              ignore_users:
+                - kibanaserver
+              ignore_requests: []
+              resolve_bulk_requests: false
+              log_request_body: true
+              resolve_indices: true
+              exclude_sensitive_headers: true
+            compliance:
+              enabled: true
+              internal_config: true
+              external_config: false
+              read_metadata_only: true
+              read_watched_fields: {}
+              read_ignore_users:
+                - kibanaserver
+              write_metadata_only: true
+              write_log_diffs: false
+              write_watched_indices: []
+              write_ignore_users:
+                - kibanaserver
+        nodes_dn.yml: |-
+          _meta:
+            type: "nodesdn"
+            config_version: 2
+        whitelist.yml: |-
+          ---
+          _meta:
+            type: "whitelist"
+            config_version: 2
+          
+          config:
+            enabled: false
+            requests:
+              /_cluster/settings:
+                - GET
+              /_cat/nodes:
+                - GET
 
   readinessProbe:
     failureThreshold: 3
@@ -612,8 +720,8 @@ opensearch-data-az2:
   securityConfig:
     enabled: true
     path: "/usr/share/opensearch/plugins/opensearch-security/securityconfig"
-    actionGroupsSecret:
-    configSecret:
+    actionGroupsSecret: "observability-opensearch-security-plugin"
+    configSecret: "observability-opensearch-security-plugin"
     internalUsersSecret: "observability-opensearch-security-plugin"
     rolesSecret: "observability-opensearch-security-plugin"
     rolesMappingSecret: "observability-opensearch-security-plugin"
@@ -621,7 +729,61 @@ opensearch-data-az2:
     config:
       securityConfigSecret: ""
       dataComplete: false
-      data: { }
+      data:
+        audit.yml: |-
+          ---
+          _meta:
+            type: "audit"
+            config_version: 2
+
+          config:
+            enabled: true
+            audit:
+              enable_rest: true
+              disabled_rest_categories:
+                - AUTHENTICATED
+                - GRANTED_PRIVILEGES
+              enable_transport: true
+              disabled_transport_categories:
+                - AUTHENTICATED
+                - GRANTED_PRIVILEGES
+              ignore_users:
+                - kibanaserver
+              ignore_requests: []
+              resolve_bulk_requests: false
+              log_request_body: true
+              resolve_indices: true
+              exclude_sensitive_headers: true
+            compliance:
+              enabled: true
+              internal_config: true
+              external_config: false
+              read_metadata_only: true
+              read_watched_fields: {}
+              read_ignore_users:
+                - kibanaserver
+              write_metadata_only: true
+              write_log_diffs: false
+              write_watched_indices: []
+              write_ignore_users:
+                - kibanaserver
+        nodes_dn.yml: |-
+          _meta:
+            type: "nodesdn"
+            config_version: 2
+        whitelist.yml: |-
+          ---
+          _meta:
+            type: "whitelist"
+            config_version: 2
+          
+          config:
+            enabled: false
+            requests:
+              /_cluster/settings:
+                - GET
+              /_cat/nodes:
+                - GET
 
   readinessProbe:
     failureThreshold: 3
