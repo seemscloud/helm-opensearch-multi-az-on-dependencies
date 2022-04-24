@@ -6,63 +6,83 @@ _meta:
 kibana_read_only:
   reserved: true
   hidden: true
+
 security_rest_api_access:
   reserved: true
   hidden: true
+
 alerting_read_access:
   reserved: true
   hidden: true
+
 alerting_ack_alerts:
   reserved: true
   hidden: true
+
 alerting_full_access:
   reserved: true
   hidden: true
+
 anomaly_read_access:
   reserved: true
   hidden: true
+
 anomaly_full_access:
   reserved: true
   hidden: true
+
 notebooks_read_access:
   reserved: true
   hidden: true
+
 notebooks_full_access:
   reserved: true
   hidden: true
+
 observability_read_access:
   reserved: true
   hidden: true
+
 observability_full_access:
   reserved: true
   hidden: true
+
 reports_instances_read_access:
   reserved: true
   hidden: true
+
 reports_read_access:
   reserved: true
   hidden: true
+
 reports_full_access:
   reserved: true
   hidden: true
+
 asynchronous_search_full_access:
   reserved: true
   hidden: true
+
 asynchronous_search_read_access:
   reserved: true
   hidden: true
+
 index_management_full_access:
   reserved: true
   hidden: true
+
 cross_cluster_replication_leader_full_access:
   reserved: true
   hidden: true
+
 cross_cluster_replication_follower_full_access:
   reserved: true
   hidden: true
+
 ml_read_access:
   reserved: true
   hidden: true
+
 ml_full_access:
   reserved: true
   hidden: true
@@ -81,6 +101,7 @@ seemscloud-admin:
         - "*"
       allowed_actions:
         - "kibana_all_write"
+
 seemscloud-observability:
   reserved: true
   tenant_permissions:
@@ -88,6 +109,7 @@ seemscloud-observability:
         - "seemscloud-observability"
       allowed_actions:
         - "kibana_all_read"
+
 seemscloud-analytics:
   reserved: true
   tenant_permissions:

@@ -1,16 +1,4 @@
-securityPlugin:
-  path: "configs/securityPlugin"
-  configs:
-    - "internal_users.yml"
-    - "roles.yml"
-    - "roles_mapping.yml"
-    - "tenants.yml"
-
-securityPluginConfigs:
-  - "internal_users.yml"
-  - "roles.yml"
-  - "roles_mapping.yml"
-  - "tenants.yml"
+environment: "prod"
 
 opensearch-master:
   nameOverride: ""

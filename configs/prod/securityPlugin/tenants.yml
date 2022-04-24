@@ -5,7 +5,9 @@ _meta:
 
 seemscloud-admin:
   reserved: true
+
 seemscloud-analytics:
   reserved: true
+
 seemscloud-observability:
   reserved: true
