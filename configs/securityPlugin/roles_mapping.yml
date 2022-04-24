@@ -1,0 +1,26 @@
+---
+_meta:
+  type: "rolesmapping"
+  config_version: 2
+
+all_access:
+  reserved: true
+  backend_roles:
+  - "admin"
+kibana_server:
+  reserved: true
+  users:
+    - "kibanaserver"
+
+seemscloud-admin:
+  reserved: true
+  users:
+    - "user01"
+seemscloud-observability:
+  reserved: true
+  users:
+    - "user02"
+seemscloud-analytics:
+  reserved: true
+  users:
+    - "user03"

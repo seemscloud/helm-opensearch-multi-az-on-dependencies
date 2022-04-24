@@ -1,0 +1,11 @@
+---
+_meta:
+  type: "tenants"
+  config_version: 2
+
+seemscloud-admin:
+  reserved: true
+seemscloud-analytics:
+  reserved: true
+seemscloud-observability:
+  reserved: true
