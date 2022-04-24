@@ -15,18 +15,18 @@ kibanaserver:
 
 user01:
   hash: "$2a$12$VcCDgh2NDk07JGN0rjGbM.Ad41qVR/YFJcgHp0UGns5JDymv..TOG"
-  reserved: true
+  reserved: false
   backend_roles:
   - "seemscloud-admin"
 
 user02:
   hash: "$2a$12$VcCDgh2NDk07JGN0rjGbM.Ad41qVR/YFJcgHp0UGns5JDymv..TOG"
-  reserved: true
+  reserved: false
   backend_roles:
   - "seemscloud-observability"
 
 user03:
   hash: "$2a$12$VcCDgh2NDk07JGN0rjGbM.Ad41qVR/YFJcgHp0UGns5JDymv..TOG"
-  reserved: true
+  reserved: false
   backend_roles:
   - "seemscloud-analytics"

@@ -14,16 +14,16 @@ kibana_server:
     - "kibanaserver"
 
 seemscloud-admin:
-  reserved: true
+  reserved: false
   users:
     - "user01"
 
 seemscloud-observability:
-  reserved: true
+  reserved: false
   users:
     - "user02"
 
 seemscloud-analytics:
-  reserved: true
+  reserved: false
   users:
     - "user03"

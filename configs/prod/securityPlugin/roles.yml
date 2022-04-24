@@ -88,7 +88,7 @@ ml_full_access:
   hidden: true
 
 seemscloud-admin:
-  reserved: true
+  reserved: false
   cluster_permissions:
     - "*"
   index_permissions:
@@ -103,7 +103,7 @@ seemscloud-admin:
         - "kibana_all_write"
 
 seemscloud-observability:
-  reserved: true
+  reserved: false
   tenant_permissions:
     - tenant_patterns:
         - "seemscloud-observability"
@@ -111,7 +111,7 @@ seemscloud-observability:
         - "kibana_all_read"
 
 seemscloud-analytics:
-  reserved: true
+  reserved: false
   tenant_permissions:
     - tenant_patterns:
         - "seemscloud-analytics"
