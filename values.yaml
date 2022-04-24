@@ -768,6 +768,7 @@ opensearch-data-az2:
               write_ignore_users:
                 - kibanaserver
         nodes_dn.yml: |-
+          ---
           _meta:
             type: "nodesdn"
             config_version: 2
