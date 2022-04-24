@@ -882,7 +882,6 @@ opensearch-dashboards:
       enabled: false
 
   labels: { }
-
   hostAliases: [ ]
 
   serverHost: "0.0.0.0"
