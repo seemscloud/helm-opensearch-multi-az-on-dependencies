@@ -108,7 +108,7 @@ seemscloud-observability:
     - tenant_patterns:
         - "seemscloud-observability"
       allowed_actions:
-        - "kibana_all_read"
+        - "kibana_all_write"
 
 seemscloud-analytics:
   reserved: false
@@ -116,4 +116,4 @@ seemscloud-analytics:
     - tenant_patterns:
         - "seemscloud-analytics"
       allowed_actions:
-        - "kibana_all_read"
+        - "kibana_all_write"
