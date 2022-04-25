@@ -1235,3 +1235,309 @@ filebeat:
 
   nameOverride: ""
   fullnameOverride: "observability-filebeat"
+
+#logstash:
+#  nameOverride: ""
+#  fullnameOverride: "observability-logstash"
+#
+#  replicas: 1
+#
+#  logstashConfig:
+#    logstash.yml: |-
+#      http.host: 0.0.0.0
+#      pipeline.ecs_compatibility: disabled
+#
+#    pipelines.yml: |-
+#      - pipeline.id: ingest
+#        pipeline.workers: 1
+#        pipeline.batch.size: 100
+#        pipeline.batch.delay: 50
+#        pipeline.ecs_compatibility: disabled
+#        pipeline.ordered: false
+#        queue.type: memory
+#        path.config: "/usr/share/logstash/pipeline"
+#        config.reload.automatic: true
+#        config.reload.interval: 3s
+#
+#  logstashPipeline:
+#    logstash.conf: |-
+#
+#    000-input.conf: |-
+#      input {
+#        http {
+#          port => "8080"
+#        }
+#        beats {
+#          port => "5044"
+#        }
+#      }
+#
+#    500-filter.conf: |-
+#      filter {
+#        mutate {
+#          add_field => { "environment" => "Production" }
+#        }
+#      }
+#
+#    999-output.conf: |-
+#      output {
+#        opensearch {
+#          hosts => [ "https://observability-opensearch-data-az2-headless:9200", "https://observability-opensearch-data-az1-headless:9200" ]
+#          index  => "observability"
+#          user => "admin"
+#          password => "admin"
+#          ssl_certificate_verification => false
+#        }
+#      }
+#
+#  logstashPatternDir: "/usr/share/logstash/patterns/"
+#  logstashPattern: { }
+#
+#  extraEnvs: [ ]
+#  envFrom: [ ]
+#
+#  secrets: [ ]
+#  secretMounts: [ ]
+#
+#  hostAliases: [ ]
+#
+#  image: "opensearchproject/logstash-oss-with-opensearch-output-plugin"
+#  imageTag: "7.16.3"
+#  imagePullPolicy: "IfNotPresent"
+#  imagePullSecrets: [ ]
+#
+#  podAnnotations: { }
+#
+#  labels: { }
+#
+#  logstashJavaOpts: "-Xmx1g -Xms1g"
+#
+#  resources:
+#    requests:
+#      cpu: "100m"
+#      memory: "128Mi"
+#    limits:
+#      cpu: "1"
+#      memory: "2Gi"
+#
+#  volumeClaimTemplate:
+#    accessModes: [ "ReadWriteOnce" ]
+#    resources:
+#      requests:
+#        storage: 1Gi
+#
+#  rbac:
+#    create: false
+#    serviceAccountAnnotations: { }
+#    serviceAccountName: ""
+#    annotations: { }
+#
+#  podSecurityPolicy:
+#    create: false
+#
+#  persistence:
+#    enabled: false
+#    annotations: { }
+#
+#  extraVolumes: ""
+#  extraVolumeMounts: ""
+#
+#  extraContainers: ""
+#  extraInitContainers: ""
+#
+#  priorityClassName: ""
+#
+#  antiAffinityTopologyKey: "kubernetes.io/hostname"
+#  antiAffinity: "empty"
+#  nodeAffinity: { }
+#  podAffinity: { }
+#
+#  podManagementPolicy: "Parallel"
+#
+#  httpPort: 9600
+#
+#  extraPorts: [ ]
+#
+#  updateStrategy: RollingUpdate
+#  maxUnavailable: 1
+#
+#  podSecurityContext:
+#    fsGroup: 1000
+#    runAsUser: 1000
+#
+#  fsGroup: ""
+#
+#  securityContext:
+#    capabilities:
+#      drop:
+#        - ALL
+#    runAsNonRoot: true
+#    runAsUser: 1000
+#
+#  terminationGracePeriod: 1
+#
+#  livenessProbe:
+#    httpGet:
+#      path: /
+#      port: http
+#    initialDelaySeconds: 30
+#    periodSeconds: 10
+#    timeoutSeconds: 5
+#    failureThreshold: 3
+#    successThreshold: 1
+#
+#  readinessProbe:
+#    httpGet:
+#      path: /
+#      port: http
+#    initialDelaySeconds: 30
+#    periodSeconds: 10
+#    timeoutSeconds: 5
+#    failureThreshold: 3
+#    successThreshold: 3
+#
+#  schedulerName: ""
+#
+#  nodeSelector: { }
+#  tolerations: [ ]
+#
+#  lifecycle: { }
+#
+#  service:
+#    annotations: { }
+#    type: ClusterIP
+#    loadBalancerIP: ""
+#    ports:
+#      - name: logstash
+#        port: 9600
+#        protocol: TCP
+#        targetPort: 9600
+#      - name: http
+#        port: 8080
+#        protocol: TCP
+#        targetPort: 8080
+#      - name: beats
+#        port: 5044
+#        protocol: TCP
+#        targetPort: 5044
+#
+#  ingress:
+#    enabled: true
+#    className: ""
+#    pathtype: Prefix
+#    hosts:
+#      - host: logstash.traefik.127.0.0.1.sslip.io
+#        paths:
+#          - path: /
+#    tls: [ ]
+#
+#filebeat:
+#  daemonset:
+#    enabled: false
+#
+#  deployment:
+#    annotations: { }
+#    labels: { }
+#    affinity: { }
+#    enabled: true
+#
+#    envFrom: [ ]
+#    extraEnvs: [ ]
+#    extraVolumes: [ ]
+#    extraVolumeMounts: [ ]
+#    secretMounts: [ ]
+#
+#    filebeatConfig:
+#      filebeat.yml: |
+#        filebeat.inputs:
+#          - type: log
+#            enabled: true
+#            paths:
+#              - /tmp/server.log
+#            fields_under_root: true
+#            encoding: utf-8
+#
+#        output.logstash:
+#          hosts: [ "observability-logstash:5044" ]
+#          loadbalance: true
+#
+#    nodeSelector: { }
+#    tolerations: [ ]
+#
+#    securityContext:
+#      runAsUser: 0
+#      privileged: false
+#
+#    resources:
+#      requests:
+#        cpu: "100m"
+#        memory: "128Mi"
+#      limits:
+#        cpu: "1"
+#        memory: "1Gi"
+#
+#  replicas: 25
+#
+#  extraContainers: ""
+#
+#  extraInitContainers: [ ]
+#
+#  hostPathRoot: /var/lib
+#
+#  dnsConfig: { }
+#  hostAliases: [ ]
+#
+#  image: "docker.elastic.co/beats/filebeat"
+#  imageTag: "7.16.3"
+#  imagePullPolicy: "IfNotPresent"
+#  imagePullSecrets: [ ]
+#
+#  livenessProbe:
+#    exec:
+#      command:
+#        - sh
+#        - -c
+#        - |
+#          curl --fail 127.0.0.1:5066
+#    failureThreshold: 3
+#    initialDelaySeconds: 10
+#    periodSeconds: 10
+#    timeoutSeconds: 5
+#
+#  readinessProbe:
+#    exec:
+#      command:
+#        - sh
+#        - -c
+#        - |
+#          filebeat test output
+#    failureThreshold: 3
+#    initialDelaySeconds: 10
+#    periodSeconds: 10
+#    timeoutSeconds: 5
+#
+#  managedServiceAccount: true
+#
+#  clusterRoleRules:
+#    - apiGroups:
+#        - ""
+#      resources:
+#        - namespaces
+#        - nodes
+#        - pods
+#      verbs:
+#        - get
+#        - list
+#        - watch
+#
+#  podAnnotations: { }
+#  serviceAccount: ""
+#  serviceAccountAnnotations: { }
+#
+#  terminationGracePeriod: 1
+#  priorityClassName: ""
+#
+#  updateStrategy: RollingUpdate
+#
+#  nameOverride: ""
+#  fullnameOverride: "observability-filebeat"
