@@ -29,12 +29,14 @@ certificates:
       name: root-ca
       kind: Issuer
       group: cert-manager.io
-  - name: root-ca-master
+  - name: nodes
     isCA: false
     commonName: "observability-opensearch-master"
     dnsNames:
-      - "observability-opensearch-master"
-      - "observability-opensearch-master-headless"
+      - "observability-opensearch-master-0"
+      - "observability-opensearch-master-1"
+      - "observability-opensearch-data-az1-0"
+      - "observability-opensearch-data-az2-0"
     duration: 8640h
     renewBefore: 168h
     privateKey:
@@ -45,39 +47,7 @@ certificates:
       name: root-ca-endpoints
       kind: Issuer
       group: cert-manager.io
-  - name: root-ca-data-az1
-    isCA: false
-    commonName: "observability-opensearch-data-az1"
-    dnsNames:
-      - "observability-opensearch-data-az1"
-      - "observability-opensearch-data-az1-headless"
-    duration: 8640h
-    renewBefore: 168h
-    privateKey:
-      algorithm: RSA
-      encoding: PKCS8
-      size: 2048
-    issuerRef:
-      name: root-ca-endpoints
-      kind: Issuer
-      group: cert-manager.io
-  - name: root-ca-data-az2
-    isCA: false
-    commonName: "observability-opensearch-data-az2"
-    dnsNames:
-      - "observability-opensearch-data-az2"
-      - "observability-opensearch-data-az2-headless"
-    duration: 8640h
-    renewBefore: 168h
-    privateKey:
-      algorithm: RSA
-      encoding: PKCS8
-      size: 2048
-    issuerRef:
-      name: root-ca-endpoints
-      kind: Issuer
-      group: cert-manager.io
-  - name: root-ca-admin
+  - name: admin
     isCA: false
     commonName: "admin"
     duration: 8640h
@@ -129,7 +99,7 @@ opensearch-master:
               pemcert_filepath: certs/node.crt.pem
               pemkey_filepath: certs/node.key.pem
               pemtrustedcas_filepath: certs/node-ca.crt.pem
-              enforce_hostname_verification: false
+              enforce_hostname_verification: true
             http:
               enabled: true
               pemcert_filepath: certs/node.crt.pem
@@ -436,7 +406,7 @@ opensearch-data-az1:
               pemcert_filepath: certs/node.crt.pem
               pemkey_filepath: certs/node.key.pem
               pemtrustedcas_filepath: certs/node-ca.crt.pem
-              enforce_hostname_verification: false
+              enforce_hostname_verification: true
             http:
               enabled: true
               pemcert_filepath: certs/node.crt.pem
@@ -741,7 +711,7 @@ opensearch-data-az2:
               pemcert_filepath: certs/node.crt.pem
               pemkey_filepath: certs/node.key.pem
               pemtrustedcas_filepath: certs/node-ca.crt.pem
-              enforce_hostname_verification: false
+              enforce_hostname_verification: true
             http:
               enabled: true
               pemcert_filepath: certs/node.crt.pem
