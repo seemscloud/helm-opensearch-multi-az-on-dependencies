@@ -6,9 +6,9 @@ kubectl delete pods `kubectl  get pods | awk '{print $1}' | tail -n +2 | xargs` 
 ```bash
 ./plugins/opensearch-security/tools/securityadmin.sh \
     -icl -nhnv -rev \
-    -cacert config/ca.crt.pem \
-    -cert config/admin.crt.pem \
-    -key config/admin.key.pem \
+    -cacert config/certs/admin-ca.crt.pem \
+    -cert config/certs/admin.crt.pem \
+    -key config/certs/admin.key.pem \
     -cd plugins/opensearch-security/securityconfig
 ````
 

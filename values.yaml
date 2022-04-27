@@ -128,13 +128,13 @@ opensearch-master:
             transport:
               pemcert_filepath: certs/node.crt.pem
               pemkey_filepath: certs/node.key.pem
-              pemtrustedcas_filepath: certs/ca.crt.pem
+              pemtrustedcas_filepath: certs/node-ca.crt.pem
               enforce_hostname_verification: false
             http:
               enabled: true
               pemcert_filepath: certs/node.crt.pem
               pemkey_filepath: certs/node.key.pem
-              pemtrustedcas_filepath: certs/ca.crt.pem
+              pemtrustedcas_filepath: certs/node-ca.crt.pem
           allow_unsafe_democertificates: false
           allow_default_init_securityindex: true
           authcz:
@@ -232,7 +232,7 @@ opensearch-master:
       subPath: tls.key
       readOnly: true
     - name: node-tls
-      mountPath: /usr/share/opensearch/config/certs/ca.crt.pem
+      mountPath: /usr/share/opensearch/config/certs/node-ca.crt.pem
       subPath: ca.crt
       readOnly: true
     - name: admin-tls
@@ -242,6 +242,10 @@ opensearch-master:
     - name: admin-tls
       mountPath: /usr/share/opensearch/config/certs/admin.key.pem
       subPath: tls.key
+      readOnly: true
+    - name: admin-tls
+      mountPath: /usr/share/opensearch/config/certs/admin-ca.crt.pem
+      subPath: ca.crt
       readOnly: true
 
   extraContainers: [ ]
@@ -431,18 +435,18 @@ opensearch-data-az1:
             transport:
               pemcert_filepath: certs/node.crt.pem
               pemkey_filepath: certs/node.key.pem
-              pemtrustedcas_filepath: certs/ca.crt.pem
+              pemtrustedcas_filepath: certs/node-ca.crt.pem
               enforce_hostname_verification: false
             http:
               enabled: true
               pemcert_filepath: certs/node.crt.pem
               pemkey_filepath: certs/node.key.pem
-              pemtrustedcas_filepath: certs/ca.crt.pem
+              pemtrustedcas_filepath: certs/node-ca.crt.pem
           allow_unsafe_democertificates: false
           allow_default_init_securityindex: true
           authcz:
             admin_dn:
-              - CN=kirk,OU=client,O=client,L=test,C=de
+              - "CN=admin"
           nodes_dn:
             - "CN=observability-opensearch-master"
             - "CN=observability-opensearch-data-az1"
@@ -533,7 +537,7 @@ opensearch-data-az1:
       subPath: tls.key
       readOnly: true
     - name: node-tls
-      mountPath: /usr/share/opensearch/config/certs/ca.crt.pem
+      mountPath: /usr/share/opensearch/config/certs/node-ca.crt.pem
       subPath: ca.crt
       readOnly: true
     - name: admin-tls
@@ -543,6 +547,10 @@ opensearch-data-az1:
     - name: admin-tls
       mountPath: /usr/share/opensearch/config/certs/admin.key.pem
       subPath: tls.key
+      readOnly: true
+    - name: admin-tls
+      mountPath: /usr/share/opensearch/config/certs/admin-ca.key.pem
+      subPath: ca.crt
       readOnly: true
 
   extraContainers: [ ]
@@ -732,18 +740,18 @@ opensearch-data-az2:
             transport:
               pemcert_filepath: certs/node.crt.pem
               pemkey_filepath: certs/node.key.pem
-              pemtrustedcas_filepath: certs/ca.crt.pem
+              pemtrustedcas_filepath: certs/node-ca.crt.pem
               enforce_hostname_verification: false
             http:
               enabled: true
               pemcert_filepath: certs/node.crt.pem
               pemkey_filepath: certs/node.key.pem
-              pemtrustedcas_filepath: certs/ca.crt.pem
+              pemtrustedcas_filepath: certs/node-ca.crt.pem
           allow_unsafe_democertificates: false
           allow_default_init_securityindex: true
           authcz:
             admin_dn:
-              - CN=kirk,OU=client,O=client,L=test,C=de
+              - "CN=admin"
           nodes_dn:
             - "CN=observability-opensearch-master"
             - "CN=observability-opensearch-data-az1"
@@ -834,7 +842,7 @@ opensearch-data-az2:
       subPath: tls.key
       readOnly: true
     - name: node-tls
-      mountPath: /usr/share/opensearch/config/certs/ca.crt.pem
+      mountPath: /usr/share/opensearch/config/certs/node-ca.crt.pem
       subPath: ca.crt
       readOnly: true
     - name: admin-tls
@@ -844,6 +852,10 @@ opensearch-data-az2:
     - name: admin-tls
       mountPath: /usr/share/opensearch/config/certs/admin.key.pem
       subPath: tls.key
+      readOnly: true
+    - name: admin-tls
+      mountPath: /usr/share/opensearch/config/certs/admin-ca.crt.pem
+      subPath: ca.crt
       readOnly: true
 
   extraContainers: [ ]
