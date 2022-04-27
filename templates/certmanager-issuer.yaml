@@ -1,0 +1,15 @@
+{{- $fullName := include "observability-opensearch.fullname" . -}}
+{{- range $issuer := .Values.issuers }}
+apiVersion: cert-manager.io/v1
+kind: {{ $issuer.kind }}
+metadata:
+  name: {{ $fullName }}-{{ $issuer.name }}
+spec:
+  {{- if $issuer.useCA.enabled }}
+  ca:
+    secretName: {{ $fullName }}-{{ $issuer.useCA.secretName }}-tls
+  {{ else }}
+  selfSigned: { }
+  {{- end }}
+---
+{{- end }}

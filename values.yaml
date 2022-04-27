@@ -1,4 +1,95 @@
+nameOverride: ""
+fullnameOverride: "observability-opensearch"
+
 environment: "prod"
+
+issuers:
+  - name: root-ca
+    kind: Issuer
+    useCA:
+      enabled: false
+      # secretName: selfsigned-ca
+  - name: root-ca-endpoints
+    kind: Issuer
+    useCA:
+      enabled: true
+      secretName: root-ca
+
+certificates:
+  - name: root-ca
+    isCA: true
+    commonName: "Opensearch Self Signed Root CA"
+    duration: 87600h
+    renewBefore: 720h
+    privateKey:
+      algorithm: RSA
+      encoding: PKCS8
+      size: 4096
+    issuerRef:
+      name: root-ca
+      kind: Issuer
+      group: cert-manager.io
+  - name: root-ca-master
+    isCA: false
+    commonName: "observability-opensearch-master"
+    dnsNames:
+      - "observability-opensearch-master"
+      - "observability-opensearch-master-headless"
+    duration: 8640h
+    renewBefore: 168h
+    privateKey:
+      algorithm: RSA
+      encoding: PKCS8
+      size: 2048
+    issuerRef:
+      name: root-ca-endpoints
+      kind: Issuer
+      group: cert-manager.io
+  - name: root-ca-data-az1
+    isCA: false
+    commonName: "observability-opensearch-data-az1"
+    dnsNames:
+      - "observability-opensearch-data-az1"
+      - "observability-opensearch-data-az1-headless"
+    duration: 8640h
+    renewBefore: 168h
+    privateKey:
+      algorithm: RSA
+      encoding: PKCS8
+      size: 2048
+    issuerRef:
+      name: root-ca-endpoints
+      kind: Issuer
+      group: cert-manager.io
+  - name: root-ca-data-az2
+    isCA: false
+    commonName: "observability-opensearch-data-az2"
+    dnsNames:
+      - "observability-opensearch-data-az2"
+      - "observability-opensearch-data-az2-headless"
+    duration: 8640h
+    renewBefore: 168h
+    privateKey:
+      algorithm: RSA
+      encoding: PKCS8
+      size: 2048
+    issuerRef:
+      name: root-ca-endpoints
+      kind: Issuer
+      group: cert-manager.io
+  - name: root-ca-admin
+    isCA: false
+    commonName: "admin"
+    duration: 8640h
+    renewBefore: 168h
+    privateKey:
+      algorithm: RSA
+      encoding: PKCS8
+      size: 2048
+    issuerRef:
+      name: root-ca-endpoints
+      kind: Issuer
+      group: cert-manager.io
 
 opensearch-master:
   nameOverride: ""
@@ -35,20 +126,24 @@ opensearch-master:
         security:
           ssl:
             transport:
-              pemcert_filepath: esnode.pem
-              pemkey_filepath: esnode-key.pem
-              pemtrustedcas_filepath: root-ca.pem
+              pemcert_filepath: node.crt.pem
+              pemkey_filepath: node.key.pem
+              pemtrustedcas_filepath: ca.crt.pem
               enforce_hostname_verification: false
             http:
               enabled: true
-              pemcert_filepath: esnode.pem
-              pemkey_filepath: esnode-key.pem
-              pemtrustedcas_filepath: root-ca.pem
-          allow_unsafe_democertificates: true
+              pemcert_filepath: node.crt.pem
+              pemkey_filepath: node.key.pem
+              pemtrustedcas_filepath: ca.crt.pem
+          allow_unsafe_democertificates: false
           allow_default_init_securityindex: true
           authcz:
             admin_dn:
-              - CN=kirk,OU=client,O=client,L=test,C=de
+              - "CN=admin"
+          nodes_dn:
+            - "CN=observability-opensearch-master"
+            - "CN=observability-opensearch-data-az1"
+            - "CN=observability-opensearch-data-az2"
           audit.type: internal_opensearch
           enable_snapshot_restore_privilege: true
           check_snapshot_restore_write_privileges: true
@@ -74,7 +169,7 @@ opensearch-master:
     - name: node.store.allow_mmap
       value: "false"
     - name: DISABLE_INSTALL_DEMO_CONFIG
-      value: "false"
+      value: "true"
     - name: DISABLE_SECURITY_PLUGIN
       value: "false"
     - name: cluster.routing.allocation.awareness.attributes
@@ -119,8 +214,35 @@ opensearch-master:
     size: 8Gi
     annotations: { }
 
-  extraVolumes: [ ]
-  extraVolumeMounts: [ ]
+  extraVolumes:
+    - name: node-tls
+      secret:
+        secretName: observability-opensearch-root-ca-master-tls
+    - name: admin-tls
+      secret:
+        secretName: observability-opensearch-root-ca-admin-tls
+
+  extraVolumeMounts:
+    - name: node-tls
+      mountPath: /usr/share/opensearch/config/node.crt.pem
+      subPath: tls.crt
+      readOnly: true
+    - name: node-tls
+      mountPath: /usr/share/opensearch/config/node.key.pem
+      subPath: tls.key
+      readOnly: true
+    - name: node-tls
+      mountPath: /usr/share/opensearch/config/ca.crt.pem
+      subPath: ca.crt
+      readOnly: true
+    - name: admin-tls
+      mountPath: /usr/share/opensearch/config/admin.crt.pem
+      subPath: tls.crt
+      readOnly: true
+    - name: admin-tls
+      mountPath: /usr/share/opensearch/config/admin.key.pem
+      subPath: tls.key
+      readOnly: true
 
   extraContainers: [ ]
   extraInitContainers: [ ]
@@ -307,20 +429,25 @@ opensearch-data-az1:
         security:
           ssl:
             transport:
-              pemcert_filepath: esnode.pem
-              pemkey_filepath: esnode-key.pem
-              pemtrustedcas_filepath: root-ca.pem
+              pemcert_filepath: node.crt.pem
+              pemkey_filepath: node.key.pem
+              pemtrustedcas_filepath: ca.crt.pem
               enforce_hostname_verification: false
             http:
               enabled: true
-              pemcert_filepath: esnode.pem
-              pemkey_filepath: esnode-key.pem
-              pemtrustedcas_filepath: root-ca.pem
-          allow_unsafe_democertificates: true
+              pemcert_filepath: node.crt.pem
+              pemkey_filepath: node.key.pem
+              pemtrustedcas_filepath: ca.crt.pem
+      
+          allow_unsafe_democertificates: false
           allow_default_init_securityindex: true
           authcz:
             admin_dn:
               - CN=kirk,OU=client,O=client,L=test,C=de
+          nodes_dn:
+            - "CN=observability-opensearch-master"
+            - "CN=observability-opensearch-data-az1"
+            - "CN=observability-opensearch-data-az2"
           audit.type: internal_opensearch
           enable_snapshot_restore_privilege: true
           check_snapshot_restore_write_privileges: true
@@ -346,7 +473,7 @@ opensearch-data-az1:
     - name: node.store.allow_mmap
       value: "false"
     - name: DISABLE_INSTALL_DEMO_CONFIG
-      value: "false"
+      value: "true"
     - name: DISABLE_SECURITY_PLUGIN
       value: "false"
     - name: node.attr.zone
@@ -389,8 +516,35 @@ opensearch-data-az1:
     size: 8Gi
     annotations: { }
 
-  extraVolumes: [ ]
-  extraVolumeMounts: [ ]
+  extraVolumes:
+    - name: node-tls
+      secret:
+        secretName: observability-opensearch-root-ca-data-az1-tls
+    - name: admin-tls
+      secret:
+        secretName: observability-opensearch-root-ca-admin-tls
+
+  extraVolumeMounts:
+    - name: node-tls
+      mountPath: /usr/share/opensearch/config/node.crt.pem
+      subPath: tls.crt
+      readOnly: true
+    - name: node-tls
+      mountPath: /usr/share/opensearch/config/node.key.pem
+      subPath: tls.key
+      readOnly: true
+    - name: node-tls
+      mountPath: /usr/share/opensearch/config/ca.crt.pem
+      subPath: ca.crt
+      readOnly: true
+    - name: admin-tls
+      mountPath: /usr/share/opensearch/config/admin.crt.pem
+      subPath: tls.crt
+      readOnly: true
+    - name: admin-tls
+      mountPath: /usr/share/opensearch/config/admin.key.pem
+      subPath: tls.key
+      readOnly: true
 
   extraContainers: [ ]
   extraInitContainers: [ ]
@@ -577,20 +731,24 @@ opensearch-data-az2:
         security:
           ssl:
             transport:
-              pemcert_filepath: esnode.pem
-              pemkey_filepath: esnode-key.pem
-              pemtrustedcas_filepath: root-ca.pem
+              pemcert_filepath: node.crt.pem
+              pemkey_filepath: node.key.pem
+              pemtrustedcas_filepath: ca.crt.pem
               enforce_hostname_verification: false
             http:
               enabled: true
-              pemcert_filepath: esnode.pem
-              pemkey_filepath: esnode-key.pem
-              pemtrustedcas_filepath: root-ca.pem
-          allow_unsafe_democertificates: true
+              pemcert_filepath: node.crt.pem
+              pemkey_filepath: node.key.pem
+              pemtrustedcas_filepath: ca.crt.pem
+          allow_unsafe_democertificates: false
           allow_default_init_securityindex: true
           authcz:
             admin_dn:
               - CN=kirk,OU=client,O=client,L=test,C=de
+          nodes_dn:
+            - "CN=observability-opensearch-master"
+            - "CN=observability-opensearch-data-az1"
+            - "CN=observability-opensearch-data-az2"
           audit.type: internal_opensearch
           enable_snapshot_restore_privilege: true
           check_snapshot_restore_write_privileges: true
@@ -616,7 +774,7 @@ opensearch-data-az2:
     - name: node.store.allow_mmap
       value: "false"
     - name: DISABLE_INSTALL_DEMO_CONFIG
-      value: "false"
+      value: "true"
     - name: DISABLE_SECURITY_PLUGIN
       value: "false"
     - name: node.attr.zone
@@ -659,8 +817,35 @@ opensearch-data-az2:
     size: 8Gi
     annotations: { }
 
-  extraVolumes: [ ]
-  extraVolumeMounts: [ ]
+  extraVolumes:
+    - name: node-tls
+      secret:
+        secretName: observability-opensearch-root-ca-data-az2-tls
+    - name: admin-tls
+      secret:
+        secretName: observability-opensearch-root-ca-admin-tls
+
+  extraVolumeMounts:
+    - name: node-tls
+      mountPath: /usr/share/opensearch/config/node.crt.pem
+      subPath: tls.crt
+      readOnly: true
+    - name: node-tls
+      mountPath: /usr/share/opensearch/config/node.key.pem
+      subPath: tls.key
+      readOnly: true
+    - name: node-tls
+      mountPath: /usr/share/opensearch/config/ca.crt.pem
+      subPath: ca.crt
+      readOnly: true
+    - name: admin-tls
+      mountPath: /usr/share/opensearch/config/admin.crt.pem
+      subPath: tls.crt
+      readOnly: true
+    - name: admin-tls
+      mountPath: /usr/share/opensearch/config/admin.key.pem
+      subPath: tls.key
+      readOnly: true
 
   extraContainers: [ ]
   extraInitContainers: [ ]

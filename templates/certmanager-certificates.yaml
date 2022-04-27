@@ -1,0 +1,27 @@
+{{- $fullName := include "observability-opensearch.fullname" . -}}
+{{- range $cert := .Values.certificates }}
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: {{ $fullName}}-{{ $cert.name }}-tls
+spec:
+  secretName: {{ $fullName}}-{{ $cert.name }}-tls
+  {{- if $cert.isCA }}
+  isCA: true
+  {{- end }}
+  commonName: {{ $cert.commonName | quote }}
+  {{- if $cert.dnsNames }}
+  dnsNames: {{ $cert.dnsNames | toJson }}
+  {{- end }}
+  duration: {{ $cert.duration }}
+  renewBefore: {{ $cert.renewBefore }}
+  privateKey:
+    algorithm: {{ $cert.privateKey.algorithm }}
+    encoding: {{ $cert.privateKey.encoding }}
+    size: {{ $cert.privateKey.size }}
+  issuerRef:
+    name: {{ $fullName }}-{{ $cert.issuerRef.name }}
+    kind: {{ $cert.issuerRef.kind }}
+    group: {{ $cert.issuerRef.group }}
+---
+{{- end }}
