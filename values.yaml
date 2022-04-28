@@ -152,15 +152,15 @@ opensearch-master:
   podAnnotations: { }
   labels: { }
 
-  opensearchJavaOpts: "-Xmx1G -Xms1G"
+  opensearchJavaOpts: "-Xmx2G -Xms2G"
 
   resources:
     requests:
       cpu: "100m"
       memory: "128Mi"
     limits:
-      cpu: "1"
-      memory: "2Gi"
+      cpu: "4"
+      memory: "3Gi"
 
   initResources: { }
   sidecarResources: { }
@@ -457,15 +457,15 @@ opensearch-data-az1:
   podAnnotations: { }
   labels: { }
 
-  opensearchJavaOpts: "-Xmx4G -Xms4G"
+  opensearchJavaOpts: "-Xmx8G -Xms8G"
 
   resources:
     requests:
       cpu: "100m"
       memory: "128Mi"
     limits:
-      cpu: "2"
-      memory: "5Gi"
+      cpu: "4"
+      memory: "9Gi"
 
   initResources: { }
   sidecarResources: { }
@@ -762,15 +762,15 @@ opensearch-data-az2:
   podAnnotations: { }
   labels: { }
 
-  opensearchJavaOpts: "-Xmx4G -Xms4G"
+  opensearchJavaOpts: "-Xmx8G -Xms8G"
 
   resources:
     requests:
       cpu: "100m"
       memory: "128Mi"
     limits:
-      cpu: "2"
-      memory: "5Gi"
+      cpu: "4"
+      memory: "9Gi"
 
   initResources: { }
   sidecarResources: { }
@@ -1077,8 +1077,8 @@ opensearch-dashboards:
       cpu: "100m"
       memory: "128Mi"
     limits:
-      cpu: "1"
-      memory: "2Gi"
+      cpu: "4"
+      memory: "4Gi"
 
   autoscaling:
     enabled: false
