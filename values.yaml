@@ -4,18 +4,18 @@ fullnameOverride: "observability-opensearch"
 environment: "prod"
 
 issuers:
-  - name: selfsigned-ca
+  - name: root-ca
     kind: Issuer
     useCA:
       enabled: false
-  - name: selfsigned-ca-endpoints
+  - name: root-ca-endpoints
     kind: Issuer
     useCA:
       enabled: true
-      secretName: selfsigned-ca
+      secretName: root-ca
 
 certificates:
-  - name: selfsigned-ca
+  - name: root-ca
     isCA: true
     commonName: "Opensearch Self Signed Root CA"
     duration: 87600h
@@ -25,7 +25,7 @@ certificates:
       encoding: PKCS8
       size: 4096
     issuerRef:
-      name: selfsigned-ca
+      name: root-ca
       kind: Issuer
       group: cert-manager.io
   - name: nodes
@@ -42,7 +42,7 @@ certificates:
       encoding: PKCS8
       size: 2048
     issuerRef:
-      name: selfsigned-ca-endpoints
+      name: root-ca-endpoints
       kind: Issuer
       group: cert-manager.io
   - name: admin
@@ -55,7 +55,7 @@ certificates:
       encoding: PKCS8
       size: 2048
     issuerRef:
-      name: selfsigned-ca-endpoints
+      name: root-ca-endpoints
       kind: Issuer
       group: cert-manager.io
 
