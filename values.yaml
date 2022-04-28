@@ -33,10 +33,9 @@ certificates:
     isCA: false
     commonName: "observability-opensearch-master"
     dnsNames:
-      - "observability-opensearch-master-0"
-      - "observability-opensearch-master-1"
-      - "observability-opensearch-data-az1-0"
-      - "observability-opensearch-data-az2-0"
+      - "observability-opensearch-master"
+      - "observability-opensearch-data-az1"
+      - "observability-opensearch-data-az2"
     duration: 8640h
     renewBefore: 168h
     privateKey:
@@ -73,7 +72,7 @@ opensearch-master:
   roles:
     - master
 
-  replicas: 2
+  replicas: 3
   minimumMasterNodes: 1
   majorVersion: ""
 
@@ -99,7 +98,7 @@ opensearch-master:
               pemcert_filepath: certs/node.crt.pem
               pemkey_filepath: certs/node.key.pem
               pemtrustedcas_filepath: certs/node-ca.crt.pem
-              enforce_hostname_verification: true
+              enforce_hostname_verification: false
             http:
               enabled: true
               pemcert_filepath: certs/node.crt.pem
@@ -153,15 +152,15 @@ opensearch-master:
   podAnnotations: { }
   labels: { }
 
-  opensearchJavaOpts: "-Xmx4G -Xms4G"
+  opensearchJavaOpts: "-Xmx1G -Xms1G"
 
   resources:
     requests:
       cpu: "100m"
       memory: "128Mi"
     limits:
-      cpu: "2"
-      memory: "5Gi"
+      cpu: "1"
+      memory: "2Gi"
 
   initResources: { }
   sidecarResources: { }
@@ -185,23 +184,23 @@ opensearch-master:
     annotations: { }
 
   extraVolumes:
-    - name: node-tls
+    - name: nodes-tls
       secret:
-        secretName: observability-opensearch-root-ca-master-tls
+        secretName: observability-opensearch-nodes-tls
     - name: admin-tls
       secret:
-        secretName: observability-opensearch-root-ca-admin-tls
+        secretName: observability-opensearch-admin-tls
 
   extraVolumeMounts:
-    - name: node-tls
+    - name: nodes-tls
       mountPath: /usr/share/opensearch/config/certs/node.crt.pem
       subPath: tls.crt
       readOnly: true
-    - name: node-tls
+    - name: nodes-tls
       mountPath: /usr/share/opensearch/config/certs/node.key.pem
       subPath: tls.key
       readOnly: true
-    - name: node-tls
+    - name: nodes-tls
       mountPath: /usr/share/opensearch/config/certs/node-ca.crt.pem
       subPath: ca.crt
       readOnly: true
@@ -406,7 +405,7 @@ opensearch-data-az1:
               pemcert_filepath: certs/node.crt.pem
               pemkey_filepath: certs/node.key.pem
               pemtrustedcas_filepath: certs/node-ca.crt.pem
-              enforce_hostname_verification: true
+              enforce_hostname_verification: false
             http:
               enabled: true
               pemcert_filepath: certs/node.crt.pem
@@ -490,23 +489,23 @@ opensearch-data-az1:
     annotations: { }
 
   extraVolumes:
-    - name: node-tls
+    - name: nodes-tls
       secret:
-        secretName: observability-opensearch-root-ca-data-az1-tls
+        secretName: observability-opensearch-nodes-tls
     - name: admin-tls
       secret:
-        secretName: observability-opensearch-root-ca-admin-tls
+        secretName: observability-opensearch-admin-tls
 
   extraVolumeMounts:
-    - name: node-tls
+    - name: nodes-tls
       mountPath: /usr/share/opensearch/config/certs/node.crt.pem
       subPath: tls.crt
       readOnly: true
-    - name: node-tls
+    - name: nodes-tls
       mountPath: /usr/share/opensearch/config/certs/node.key.pem
       subPath: tls.key
       readOnly: true
-    - name: node-tls
+    - name: nodes-tls
       mountPath: /usr/share/opensearch/config/certs/node-ca.crt.pem
       subPath: ca.crt
       readOnly: true
@@ -711,7 +710,7 @@ opensearch-data-az2:
               pemcert_filepath: certs/node.crt.pem
               pemkey_filepath: certs/node.key.pem
               pemtrustedcas_filepath: certs/node-ca.crt.pem
-              enforce_hostname_verification: true
+              enforce_hostname_verification: false
             http:
               enabled: true
               pemcert_filepath: certs/node.crt.pem
@@ -795,23 +794,23 @@ opensearch-data-az2:
     annotations: { }
 
   extraVolumes:
-    - name: node-tls
+    - name: nodes-tls
       secret:
-        secretName: observability-opensearch-root-ca-data-az2-tls
+        secretName: observability-opensearch-nodes-tls
     - name: admin-tls
       secret:
-        secretName: observability-opensearch-root-ca-admin-tls
+        secretName: observability-opensearch-admin-tls
 
   extraVolumeMounts:
-    - name: node-tls
+    - name: nodes-tls
       mountPath: /usr/share/opensearch/config/certs/node.crt.pem
       subPath: tls.crt
       readOnly: true
-    - name: node-tls
+    - name: nodes-tls
       mountPath: /usr/share/opensearch/config/certs/node.key.pem
       subPath: tls.key
       readOnly: true
-    - name: node-tls
+    - name: nodes-tls
       mountPath: /usr/share/opensearch/config/certs/node-ca.crt.pem
       subPath: ca.crt
       readOnly: true
@@ -1079,7 +1078,7 @@ opensearch-dashboards:
       memory: "128Mi"
     limits:
       cpu: "1"
-      memory: "1Gi"
+      memory: "2Gi"
 
   autoscaling:
     enabled: false
