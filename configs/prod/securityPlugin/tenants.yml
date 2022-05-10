@@ -3,10 +3,7 @@ _meta:
   type: "tenants"
   config_version: 2
 
-seemscloud-admin:
-  reserved: false
-
-seemscloud-analytics:
+seemscloud-global:
   reserved: false
 
 seemscloud-observability:

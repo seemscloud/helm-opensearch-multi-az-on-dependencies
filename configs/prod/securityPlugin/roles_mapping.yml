@@ -6,24 +6,19 @@ _meta:
 all_access:
   reserved: true
   backend_roles:
-  - "admin"
+    - "admin"
 
 kibana_server:
   reserved: true
   users:
     - "kibanaserver"
 
-seemscloud-admin:
+seemscloud-global:
   reserved: false
-  users:
-    - "user01"
+  backend_roles:
+    - "seemscloud-observability"
 
 seemscloud-observability:
   reserved: false
-  users:
-    - "user02"
-
-seemscloud-analytics:
-  reserved: false
-  users:
-    - "user03"
+  backend_roles:
+    - "seemscloud-observability"
