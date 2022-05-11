@@ -8,3 +8,6 @@ seemscloud-global:
 
 seemscloud-observability:
   reserved: false
+
+seemscloud-analytics:
+  reserved: false

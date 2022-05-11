@@ -17,8 +17,14 @@ seemscloud-global:
   reserved: false
   backend_roles:
     - "seemscloud-observability"
+    - "seemscloud-analytics"
 
 seemscloud-observability:
   reserved: false
   backend_roles:
     - "seemscloud-observability"
+
+seemscloud-analytics:
+  reserved: false
+  backend_roles:
+    - "seemscloud-analytics"

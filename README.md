@@ -1,18 +1,28 @@
+# Opensearch Deployment
+
 ```bash
-helm upgrade observability-opensearch . --install -f values.yaml --recreate-pods
-kubectl delete pods `kubectl  get pods | awk '{print $1}' | tail -n +2 | xargs` --force
+helm uninstall observability-opensearch
+kubectl delete pods `kubectl  get pods | awk '{print $1}' | tail -n +2` --force
+helm install observability-opensearch . -f values.yaml
 ```
 
 ```bash
 /usr/share/opensearch/plugins/opensearch-security/tools/securityadmin.sh \
     -icl -nhnv -rev \
+    -h observability-opensearch-master -p 9300 \
     -cacert config/certs/admin-ca.crt.pem \
-    -cert config/certs/admin.crt.pem \
-    -key config/certs/admin.key.pem \
-    -cd plugins/opensearch-security/securityconfig \
-    -h observability-opensearch-master \
-    -p 9300
+    -cert config/certs/admin.crt.pem -key config/certs/admin.key.pem \
+    -cd plugins/opensearch-security/securityconfig
 ````
+
+```yaml
+requiredDuringSchedulingIgnoredDuringExecution:
+  nodeSelectorTerms:
+    - matchExpressions:
+        - key: topology.kubernetes.io/zone
+          operator: In
+          values: [ "az1" ]
+```
 
 ```bash
 cat > server.sh << "EndOfMessage"
@@ -28,31 +38,6 @@ for POD in `kubectl get pods | grep -i filebeat | awk '{print $1}'` ; do
   kubectl exec -it "${POD}" -- /bin/bash -c "`cat server.sh`"
   echo "End: ${POD}"
 done
-```
-
-```yaml
-extraInitContainers:
-  - name: sysctl
-    image: docker.io/bitnami/bitnami-shell:10-debian-10-r199
-    imagePullPolicy: "IfNotPresent"
-    command:
-      - /bin/bash
-      - -ec
-      - |
-        sysctl -w vm.max_map_count=262144;
-
-    securityContext:
-      runAsUser: 0
-      privileged: true
-```
-
-```yaml
-requiredDuringSchedulingIgnoredDuringExecution:
-  nodeSelectorTerms:
-    - matchExpressions:
-        - key: topology.kubernetes.io/zone
-          operator: In
-          values: [ "az1" ]
 ```
 
 ```yaml
