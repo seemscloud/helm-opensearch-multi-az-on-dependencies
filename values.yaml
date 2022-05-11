@@ -71,7 +71,7 @@ opensearch-master:
   roles:
     - master
 
-  replicas: 2
+  replicas: 3
   minimumMasterNodes: 1
   majorVersion: ""
 
@@ -158,8 +158,8 @@ opensearch-master:
       cpu: "100m"
       memory: "128Mi"
     limits:
-      cpu: "4"
-      memory: "3Gi"
+      cpu: "1"
+      memory: "4Gi"
 
   initResources: { }
   sidecarResources: { }
@@ -173,7 +173,7 @@ opensearch-master:
     create: false
 
   persistence:
-    enabled: false
+    enabled: true
     enableInitChown: true
     labels:
       enabled: false
@@ -456,15 +456,15 @@ opensearch-data-az1:
   podAnnotations: { }
   labels: { }
 
-  opensearchJavaOpts: "-Xmx8G -Xms8G"
+  opensearchJavaOpts: "-Xmx2G -Xms2G"
 
   resources:
     requests:
       cpu: "100m"
       memory: "128Mi"
     limits:
-      cpu: "4"
-      memory: "9Gi"
+      cpu: "1"
+      memory: "4Gi"
 
   initResources: { }
   sidecarResources: { }
@@ -478,7 +478,7 @@ opensearch-data-az1:
     create: false
 
   persistence:
-    enabled: false
+    enabled: true
     enableInitChown: true
     labels:
       enabled: false
@@ -761,15 +761,15 @@ opensearch-data-az2:
   podAnnotations: { }
   labels: { }
 
-  opensearchJavaOpts: "-Xmx8G -Xms8G"
+  opensearchJavaOpts: "-Xmx2G -Xms2G"
 
   resources:
     requests:
       cpu: "100m"
       memory: "128Mi"
     limits:
-      cpu: "4"
-      memory: "9Gi"
+      cpu: "1"
+      memory: "4Gi"
 
   initResources: { }
   sidecarResources: { }
@@ -783,7 +783,7 @@ opensearch-data-az2:
     create: false
 
   persistence:
-    enabled: false
+    enabled: true
     enableInitChown: true
     labels:
       enabled: false
@@ -1076,7 +1076,7 @@ opensearch-dashboards:
       cpu: "100m"
       memory: "128Mi"
     limits:
-      cpu: "4"
+      cpu: "1"
       memory: "4Gi"
 
   autoscaling:
