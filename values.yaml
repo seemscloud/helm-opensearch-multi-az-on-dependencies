@@ -17,7 +17,7 @@ issuers:
 certificates:
   - name: ca
     isCA: true
-    commonName: "Root CA"
+    commonName: "Opensearch Root CA"
     duration: 87600h
     renewBefore: 720h
     privateKey:
