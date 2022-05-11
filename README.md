@@ -4,12 +4,14 @@ kubectl delete pods `kubectl  get pods | awk '{print $1}' | tail -n +2 | xargs` 
 ```
 
 ```bash
-./plugins/opensearch-security/tools/securityadmin.sh \
+/usr/share/opensearch/plugins/opensearch-security/tools/securityadmin.sh \
     -icl -nhnv -rev \
     -cacert config/certs/admin-ca.crt.pem \
     -cert config/certs/admin.crt.pem \
     -key config/certs/admin.key.pem \
-    -cd plugins/opensearch-security/securityconfig
+    -cd plugins/opensearch-security/securityconfig \
+    -h observability-opensearch-master \
+    -p 9300
 ````
 
 ```bash

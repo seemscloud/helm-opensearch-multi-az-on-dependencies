@@ -47,7 +47,7 @@ certificates:
       group: cert-manager.io
   - name: admin
     isCA: false
-    commonName: "admin"
+    commonName: "observability-opensearch-admin"
     duration: 8640h
     renewBefore: 168h
     privateKey:
@@ -107,7 +107,7 @@ opensearch-master:
           allow_default_init_securityindex: true
           authcz:
             admin_dn:
-              - "CN=admin"
+              - "CN=observability-opensearch-admin"
           nodes_dn:
             - "CN=observability-opensearch-master"
             - "CN=observability-opensearch-data-az1"
@@ -217,7 +217,71 @@ opensearch-master:
       readOnly: true
 
   extraContainers: [ ]
-  extraInitContainers: [ ]
+  extraInitContainers:
+    - name: security
+      image: "opensearchproject/opensearch"
+      command: [ "/bin/bash", "-c" ]
+      volumeMounts:
+        - mountPath: /usr/share/opensearch/plugins/opensearch-security/securityconfig/action_groups.yml
+          name: action-groups
+          subPath: action_groups.yml
+        - mountPath: /usr/share/opensearch/plugins/opensearch-security/securityconfig/config.yml
+          name: security-config
+          subPath: config.yml
+        - mountPath: /usr/share/opensearch/plugins/opensearch-security/securityconfig/internal_users.yml
+          name: internal-users-config
+          subPath: internal_users.yml
+        - mountPath: /usr/share/opensearch/plugins/opensearch-security/securityconfig/roles.yml
+          name: roles
+          subPath: roles.yml
+        - mountPath: /usr/share/opensearch/plugins/opensearch-security/securityconfig/roles_mapping.yml
+          name: role-mapping
+          subPath: roles_mapping.yml
+        - mountPath: /usr/share/opensearch/plugins/opensearch-security/securityconfig/tenants.yml
+          name: tenants
+          subPath: tenants.yml
+        - mountPath: /usr/share/opensearch/plugins/opensearch-security/securityconfig/audit.yml
+          name: security-config-data
+          subPath: audit.yml
+        - mountPath: /usr/share/opensearch/plugins/opensearch-security/securityconfig/nodes_dn.yml
+          name: security-config-data
+          subPath: nodes_dn.yml
+        - mountPath: /usr/share/opensearch/plugins/opensearch-security/securityconfig/whitelist.yml
+          name: security-config-data
+          subPath: whitelist.yml
+        - mountPath: /usr/share/opensearch/config/certs/admin.crt.pem
+          name: admin-tls
+          readOnly: true
+          subPath: tls.crt
+        - mountPath: /usr/share/opensearch/config/certs/admin.key.pem
+          name: admin-tls
+          readOnly: true
+          subPath: tls.key
+        - mountPath: /usr/share/opensearch/config/certs/admin-ca.crt.pem
+          name: admin-tls
+          readOnly: true
+          subPath: ca.crt
+      args:
+        - |
+          PORT="9300";
+          ENDPOINT=observability-opensearch-master;
+          
+          read -d "" TO_EXEC <<EndOfMessage
+          /usr/share/opensearch/plugins/opensearch-security/tools/securityadmin.sh \
+          -icl -nhnv -rev -h ${ENDPOINT} -p ${PORT} \
+          -cacert config/certs/admin-ca.crt.pem \
+          -cert config/certs/admin.crt.pem -key config/certs/admin.key.pem \
+          -cd plugins/opensearch-security/securityconfig
+          EndOfMessage
+          
+          if [ "${HOSTNAME##*-}" == "0" ] ; then
+            while true; do
+              if timeout 3 /bin/bash -c "echo > /dev/tcp/${ENDPOINT}/${PORT}" ; then
+                eval "${TO_EXEC}" && echo "Security plugin updated.." && break;
+              fi
+              echo "Waiting for port.." && sleep 1;
+            done
+          fi
 
   antiAffinityTopologyKey: "kubernetes.io/hostname"
   antiAffinity: "soft"
@@ -414,7 +478,7 @@ opensearch-data-az1:
           allow_default_init_securityindex: true
           authcz:
             admin_dn:
-              - "CN=admin"
+              - "CN=observability-opensearch-admin"
           nodes_dn:
             - "CN=observability-opensearch-master"
             - "CN=observability-opensearch-data-az1"
@@ -719,7 +783,7 @@ opensearch-data-az2:
           allow_default_init_securityindex: true
           authcz:
             admin_dn:
-              - "CN=admin"
+              - "CN=observability-opensearch-admin"
           nodes_dn:
             - "CN=observability-opensearch-master"
             - "CN=observability-opensearch-data-az1"
