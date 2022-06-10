@@ -263,7 +263,7 @@ opensearch-master:
           subPath: ca.crt
       args:
         - |
-          PORT="9300";
+          PORT="9200";
           ENDPOINT=observability-opensearch-master;
           
           read -d "" TO_EXEC <<EndOfMessage
