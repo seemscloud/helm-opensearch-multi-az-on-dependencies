@@ -1,6 +1,15 @@
 # Opensearch Deployment
 
 ```bash
+helm install \
+  cert-manager jetstack/cert-manager \
+  --namespace cert-manager \
+  --create-namespace \
+  --version v1.7.2 \
+  --set installCRDs=true
+```
+
+```bash
 helm uninstall observability-opensearch
 kubectl delete pods `kubectl  get pods | awk '{print $1}' | tail -n +2` --force
 helm install observability-opensearch . -f values.yaml
