@@ -1114,7 +1114,7 @@ opensearch-dashboards:
   serverHost: "0.0.0.0"
 
   service:
-    type: ClusterIP
+    type: LoadBalancer
     port: 5601
     loadBalancerIP: ""
     nodePort: ""
