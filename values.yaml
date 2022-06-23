@@ -61,7 +61,7 @@ certificates:
 
 opensearch-master:
   nameOverride: ""
-  fullnameOverride: ""
+  fullnameOverride: "observability-opensearch-master"
 
   clusterName: "observability-opensearch"
   nodeGroup: "master"
@@ -432,7 +432,7 @@ opensearch-master:
 
 opensearch-data-az1:
   nameOverride: ""
-  fullnameOverride: ""
+  fullnameOverride: "observability-opensearch-data-az1"
 
   clusterName: "observability-opensearch"
   nodeGroup: "data-az1"
@@ -737,7 +737,7 @@ opensearch-data-az1:
 
 opensearch-data-az2:
   nameOverride: ""
-  fullnameOverride: ""
+  fullnameOverride: "observability-opensearch-data-az2"
 
   clusterName: "observability-opensearch"
   nodeGroup: "data-az2"
