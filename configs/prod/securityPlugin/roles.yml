@@ -87,24 +87,6 @@ ml_full_access:
   reserved: true
   hidden: true
 
-seemscloud-global:
-  reserved: false
-  cluster_permissions:
-    - "indices:data/read/mget"
-    - "indices:data/write/bulk"
-  index_permissions:
-    - index_patterns:
-        - "global-*"
-      allowed_actions:
-        - "indices:admin/resolve/index"
-        - "indices:data/read/field_caps"
-        - "indices:data/read/search"
-  tenant_permissions:
-    - tenant_patterns:
-        - "seemscloud-global"
-      allowed_actions:
-        - "kibana_all_read"
-
 seemscloud-observability:
   reserved: false
   cluster_permissions:
@@ -119,6 +101,6 @@ seemscloud-observability:
         - "indices:data/read/search"
   tenant_permissions:
     - tenant_patterns:
-        - "seemscloud-global"
+        - "seemscloud-observability"
       allowed_actions:
         - "kibana_all_write"

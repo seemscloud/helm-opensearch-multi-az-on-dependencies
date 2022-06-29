@@ -13,12 +13,7 @@ kibana_server:
   users:
     - "kibanaserver"
 
-seemscloud-global:
-  reserved: false
-  backend_roles:
-    - "seemscloud-observability"
-
-seemscloud-users:
+seemscloud-observability:
   reserved: false
   backend_roles:
     - "seemscloud-observability"

@@ -3,5 +3,5 @@ _meta:
   type: "tenants"
   config_version: 2
 
-seemscloud-global:
+seemscloud-observability:
   reserved: false
