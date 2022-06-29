@@ -16,15 +16,9 @@ kibana_server:
 seemscloud-global:
   reserved: false
   backend_roles:
-    - "seemscloud-observability"
-    - "seemscloud-analytics"
+    - "seemscloud-users"
 
-seemscloud-observability:
+seemscloud-users:
   reserved: false
   backend_roles:
-    - "seemscloud-observability"
-
-seemscloud-analytics:
-  reserved: false
-  backend_roles:
-    - "seemscloud-analytics"
+    - "seemscloud-users"

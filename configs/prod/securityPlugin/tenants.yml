@@ -5,9 +5,3 @@ _meta:
 
 seemscloud-global:
   reserved: false
-
-seemscloud-observability:
-  reserved: false
-
-seemscloud-analytics:
-  reserved: false
