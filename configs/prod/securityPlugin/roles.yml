@@ -93,7 +93,6 @@ seemscloud-observability:
     - "indices:data/read/mget"
     - "indices:admin/aliases/get"
     - "indices:data/write/bulk"
-    - "cluster:monitor/state"
     - "cluster:admin/opensearch/notifications/configs/get"
     - "cluster:admin/opensearch/notifications/features"
     - "cluster:admin/opensearch/notifications/configs/create"
@@ -105,6 +104,8 @@ seemscloud-observability:
     - "cluster:admin/opendistro/alerting/monitor/execute"
     - "cluster:admin/opendistro/alerting/monitor/write"
     - "cluster:admin/opendistro/alerting/alerts/get"
+    - "cluster:monitor/health"
+    - "cluster:monitor/state"
     - "cluster:monitor/nodes/info"
   index_permissions:
     - index_patterns:
