@@ -105,7 +105,7 @@ seemscloud-global:
       allowed_actions:
         - "kibana_all_read"
 
-seemscloud-users:
+seemscloud-observability:
   reserved: false
   cluster_permissions:
     - "indices:data/read/mget"

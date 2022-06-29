@@ -16,9 +16,9 @@ kibana_server:
 seemscloud-global:
   reserved: false
   backend_roles:
-    - "seemscloud-users"
+    - "seemscloud-observability"
 
 seemscloud-users:
   reserved: false
   backend_roles:
-    - "seemscloud-users"
+    - "seemscloud-observability"
