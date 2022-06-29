@@ -91,14 +91,33 @@ seemscloud-observability:
   reserved: false
   cluster_permissions:
     - "indices:data/read/mget"
+    - "indices:admin/aliases/get"
     - "indices:data/write/bulk"
+    - "cluster:monitor/state"
+    - "cluster:admin/opensearch/notifications/configs/get"
+    - "cluster:admin/opensearch/notifications/features"
+    - "cluster:admin/opensearch/notifications/configs/create"
+    - "cluster:admin/opensearch/notifications/configs/delete"
+    - "cluster:admin/opendistro/alerting/destination/get"
+    - "cluster:admin/opendistro/alerting/monitor/get"
+    - "cluster:admin/opendistro/alerting/monitor/search"
+    - "cluster:admin/opendistro/alerting/monitor/execute"
+    - "cluster:admin/opendistro/alerting/monitor/write"
+    - "cluster:admin/opendistro/alerting/alerts/get"
+    - "cluster:monitor/nodes/info"
   index_permissions:
     - index_patterns:
-        - "users-*"
+        - "observability-*"
       allowed_actions:
         - "indices:admin/resolve/index"
         - "indices:data/read/field_caps"
         - "indices:data/read/search"
+    - index_patterns:
+        - "*"
+      allowed_actions:
+        - "indices:admin/aliases/get"
+        - "indices:monitor/stats"
+        - "indices:monitor/settings/get"
   tenant_permissions:
     - tenant_patterns:
         - "seemscloud-observability"
