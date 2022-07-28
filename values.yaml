@@ -3,6 +3,19 @@ fullnameOverride: "observability-opensearch"
 
 environment: "prod"
 
+global:
+  dockerRegistry: ""
+
+securityPlugin:
+  secrets:
+    perms: "observability-opensearch-securityconfig"
+    others: "observability-opensearch-master-securityconfig"
+    certs: "observability-opensearch-admin-tls"
+  image:
+    repository: "opensearchproject/opensearch"
+    tag: ""
+    pullPolicy: "IfNotPresent"
+
 issuers:
   - name: ca
     kind: Issuer
@@ -144,6 +157,7 @@ opensearch-master:
       value: "zone"
     - name: cluster.routing.allocation.awareness.force.zone.values
       value: "az1,az2"
+
   envFrom: [ ]
   secretMounts: [ ]
   hostAliases: [ ]
@@ -217,71 +231,7 @@ opensearch-master:
       readOnly: true
 
   extraContainers: [ ]
-  extraInitContainers:
-    - name: security
-      image: "opensearchproject/opensearch"
-      command: [ "/bin/bash", "-c" ]
-      volumeMounts:
-        - mountPath: /usr/share/opensearch/plugins/opensearch-security/securityconfig/action_groups.yml
-          name: action-groups
-          subPath: action_groups.yml
-        - mountPath: /usr/share/opensearch/plugins/opensearch-security/securityconfig/config.yml
-          name: security-config
-          subPath: config.yml
-        - mountPath: /usr/share/opensearch/plugins/opensearch-security/securityconfig/internal_users.yml
-          name: internal-users-config
-          subPath: internal_users.yml
-        - mountPath: /usr/share/opensearch/plugins/opensearch-security/securityconfig/roles.yml
-          name: roles
-          subPath: roles.yml
-        - mountPath: /usr/share/opensearch/plugins/opensearch-security/securityconfig/roles_mapping.yml
-          name: role-mapping
-          subPath: roles_mapping.yml
-        - mountPath: /usr/share/opensearch/plugins/opensearch-security/securityconfig/tenants.yml
-          name: tenants
-          subPath: tenants.yml
-        - mountPath: /usr/share/opensearch/plugins/opensearch-security/securityconfig/audit.yml
-          name: security-config-data
-          subPath: audit.yml
-        - mountPath: /usr/share/opensearch/plugins/opensearch-security/securityconfig/nodes_dn.yml
-          name: security-config-data
-          subPath: nodes_dn.yml
-        - mountPath: /usr/share/opensearch/plugins/opensearch-security/securityconfig/whitelist.yml
-          name: security-config-data
-          subPath: whitelist.yml
-        - mountPath: /usr/share/opensearch/config/certs/admin.crt.pem
-          name: admin-tls
-          readOnly: true
-          subPath: tls.crt
-        - mountPath: /usr/share/opensearch/config/certs/admin.key.pem
-          name: admin-tls
-          readOnly: true
-          subPath: tls.key
-        - mountPath: /usr/share/opensearch/config/certs/admin-ca.crt.pem
-          name: admin-tls
-          readOnly: true
-          subPath: ca.crt
-      args:
-        - |
-          PORT="9200";
-          ENDPOINT=observability-opensearch-master;
-          
-          read -d "" TO_EXEC <<EndOfMessage
-          /usr/share/opensearch/plugins/opensearch-security/tools/securityadmin.sh \
-          -icl -nhnv -rev -h ${ENDPOINT} -p ${PORT} \
-          -cacert config/certs/admin-ca.crt.pem \
-          -cert config/certs/admin.crt.pem -key config/certs/admin.key.pem \
-          -cd plugins/opensearch-security/securityconfig
-          EndOfMessage
-          
-          if [ "${HOSTNAME##*-}" == "0" ] ; then
-            while true; do
-              if timeout 3 /bin/bash -c "echo > /dev/tcp/${ENDPOINT}/${PORT}" ; then
-                eval "${TO_EXEC}" && echo "Security plugin updated.." && break;
-              fi
-              echo "Waiting for port.." && sleep 1;
-            done
-          fi
+  extraInitContainers: []
 
   antiAffinityTopologyKey: "kubernetes.io/hostname"
   antiAffinity: "soft"
@@ -336,7 +286,7 @@ opensearch-master:
 
   securityConfig:
     enabled: true
-    path: "/usr/share/opensearch/plugins/opensearch-security/securityconfig"
+    path: "/usr/share/opensearch/config/opensearch-security"
     actionGroupsSecret: "observability-opensearch-security-plugin"
     configSecret: "observability-opensearch-security-plugin"
     internalUsersSecret: "observability-opensearch-security-plugin"
@@ -641,7 +591,7 @@ opensearch-data-az1:
 
   securityConfig:
     enabled: true
-    path: "/usr/share/opensearch/plugins/opensearch-security/securityconfig"
+    path: "/usr/share/opensearch/config/opensearch-security"
     actionGroupsSecret: "observability-opensearch-security-plugin"
     configSecret: "observability-opensearch-security-plugin"
     internalUsersSecret: "observability-opensearch-security-plugin"
@@ -946,7 +896,7 @@ opensearch-data-az2:
 
   securityConfig:
     enabled: true
-    path: "/usr/share/opensearch/plugins/opensearch-security/securityconfig"
+    path: "/usr/share/opensearch/config/opensearch-security"
     actionGroupsSecret: "observability-opensearch-security-plugin"
     configSecret: "observability-opensearch-security-plugin"
     internalUsersSecret: "observability-opensearch-security-plugin"
@@ -1126,8 +1076,9 @@ opensearch-dashboards:
   ingress:
     enabled: true
     annotations: { }
+    ingressClassName: nginx
     hosts:
-      - host: opensearch-dashboard.traefik.127.0.0.1.sslip.io
+      - host: dashboards.localhost
         paths:
           - path: /
             backend:

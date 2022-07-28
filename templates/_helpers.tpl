@@ -32,3 +32,11 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 app.kubernetes.io/name: {{ include "observability-opensearch.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
+
+{{- define "observability-opensearch.dockerRegistry" -}}
+{{- if eq .Values.global.dockerRegistry "" -}}
+  {{- .Values.global.dockerRegistry -}}
+{{- else -}}
+  {{- .Values.global.dockerRegistry | trimSuffix "/" | printf "%s/" -}}
+{{- end -}}
+{{- end -}}

@@ -5,10 +5,6 @@ _meta:
 
 config:
   dynamic:
-    http:
-      anonymous_auth_enabled: false
-      xff:
-        enabled: false
     authc:
       basic_internal_auth_domain:
         description: "Authenticate via HTTP Basic against internal users database"

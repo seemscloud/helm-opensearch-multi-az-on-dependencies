@@ -10,15 +10,15 @@ appVersion: "2.1.0"
 dependencies:
   - name: opensearch
     alias: opensearch-master
-    version: 2.1.0
+    version: 2.0.1
     repository: https://opensearch-project.github.io/helm-charts/
   - name: opensearch
     alias: opensearch-data-az1
-    version: 2.1.0
+    version: 2.0.1
     repository: https://opensearch-project.github.io/helm-charts/
   - name: opensearch
     alias: opensearch-data-az2
-    version: 2.1.0
+    version: 2.0.1
     repository: https://opensearch-project.github.io/helm-charts/
   - name: opensearch-dashboards
     alias: opensearch-dashboards
